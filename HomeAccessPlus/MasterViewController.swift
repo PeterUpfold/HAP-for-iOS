@@ -28,14 +28,14 @@ import SwiftyJSON
 
 class MasterViewController: UITableViewController, UISplitViewControllerDelegate, UIPopoverPresentationControllerDelegate, UIGestureRecognizerDelegate, uploadFileDelegate {
 
-    var detailViewController: DetailViewController? = nil
-    var objects = [AnyObject]()
+    @objc var detailViewController: DetailViewController? = nil
+    @objc var objects = [AnyObject]()
     
     // Loading an instance of the HAPi
     let api = HAPi()
     
     // MBProgressHUD variable, so that the detail label can be updated as needed
-    var hud : MBProgressHUD = MBProgressHUD()
+    @objc var hud : MBProgressHUD = MBProgressHUD()
     
     // Seeing how the app should handle the collapse of the master
     // view in relation to the detail view
@@ -52,7 +52,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     // Attempting to load the view of a view controller while it is
     // deallocating is not allowed and may result in undefined behavior
     // See: https://www.cocoanetics.com/2014/08/dismissal-completion-handler/
-    var showFileExistsAlert : Bool = false
+    @objc var showFileExistsAlert : Bool = false
     
     /// As the loadFileBrowser() function call is inside the
     /// viewDidLoad() function, it gets called before the
@@ -65,14 +65,14 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// state restoration process, it will be false when the
     /// app starts again, and the loadFileBrowser() function
     /// will not be called
-    var viewLoadedFromBrowsing : Bool = false
+    @objc var viewLoadedFromBrowsing : Bool = false
     
     /// A listing to the current folder the user is in, or
     /// an empty string if the main drive listing is being
     /// shown
     /// - note: This variable should be set before the view
     ///         controller is called in the 'prepareForSegue'
-    var currentPath = ""
+    @objc var currentPath = ""
     
     /// Array to hold the items that are shown in the table that
     /// is used to browse the files
@@ -85,7 +85,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///   4. The extension of the file, or empty if it is a directory
     ///   5. Additional details for the file (size, modified date, etc...)
     ///   6. User has write permission for the item
-    var fileItems: [NSArray] = []
+    @objc var fileItems: [NSArray] = []
     
     /// Does the user have write permission granted in the current
     /// directory being viewed. This is set to false as a failsafe
@@ -95,48 +95,48 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// should be enabled or not
     /// - note: This variable should be set before the view
     ///         controller is called in the 'prepareForSegue'
-    var writeGranted : Bool = false
+    @objc var writeGranted : Bool = false
     
     /// If the multi picker is used in the upload popover, then
     /// this variable is used to see if there is currently a file
     /// being uploaded before attempting to upload the next file
-    var uploadingFile : Bool = false
+    @objc var uploadingFile : Bool = false
     
     /// If multiple files are to be uploaded, then this variable
     /// should be set to true, so that various functions know
     /// what options to show. This function should not be used
     /// to signify that there is a file being uploaded, instead
     /// uploadingFile should be used
-    var multipleFilesUploadEnabled : Bool = false
+    @objc var multipleFilesUploadEnabled : Bool = false
     
     /// If the multi picker is used, then this array will contain a
     /// list of on-device file path locations, that are used to
     /// know when to upload the file from
-    var multipleFilesFileList: NSArray = []
+    @objc var multipleFilesFileList: NSArray = []
     
     /// If the multi picker is used, then it is useful to know the
     /// total number of files that are to be uploaded, so that the
     /// progress bars can be filled in accordingly
-    var multipleFilesTotalFiles = 0
+    @objc var multipleFilesTotalFiles = 0
     
     /// If multiple files are being uploaded, keep a count of the current
     /// file number that is being uploaded, so that the progress bars
     /// can be updated correctly
-    var multipleFilesCurrentFileNumber = 0
+    @objc var multipleFilesCurrentFileNumber = 0
     
     /// If the user has long-pressed an item on the table view, then
     /// a "different" mode is enabled to allow selecting multiple
     /// items so they can be cut or copied
-    var cutCopyModeEnabled : Bool = false
+    @objc var cutCopyModeEnabled : Bool = false
     
     /// A list of the table row IDs that have been selected to be
     /// cut or copied
-    var cutCopyFilesList: [Int] = []
+    @objc var cutCopyFilesList: [Int] = []
     
     /// A reference of the original title of the folder before
     /// the files have been selected, so that it can be restored
     /// if the user cancels the cut / copy operation
-    var cutCopyOriginalTitle = ""
+    @objc var cutCopyOriginalTitle = ""
     
 
     override func viewDidLoad() {
@@ -167,7 +167,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         // user is at the top and pulls down, or if there was a problem
         // loading the folder and they want to try again
         // See: https://www.andrewcbancroft.com/2015/03/17/basics-of-pull-to-refresh-for-swift-developers/
-        self.refreshControl?.addTarget(self, action: #selector(MasterViewController.loadFileBrowser), for: UIControlEvents.valueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(MasterViewController.loadFileBrowser), for: UIControl.Event.valueChanged)
         
         // Allowing the table cells to be long pressed, so that multiple
         // rows can be selected at once to allow cutting and copying, only
@@ -210,7 +210,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         // Dispose of any resources that can be recreated.
     }
 
-    func insertNewObject(_ sender: AnyObject) {
+    @objc func insertNewObject(_ sender: AnyObject) {
         objects.insert(Date() as AnyObject, at: 0)
         let indexPath = IndexPath(row: 0, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .automatic)
@@ -229,7 +229,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - since: 0.3.0-beta
     /// - version: 6
     /// - date: 2015-12-19
-    func loadFileBrowser() {
+    @objc func loadFileBrowser() {
         // Hiding the built in table refresh control, as the
         // HUD will replace the loading spinner
         refreshControl?.endRefreshing()
@@ -316,9 +316,9 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                     // The cancel and default action styles are back to front, as
                     // the cancel option is bold, which we want the 'try again'
                     // option to be chosen by the user
-                    let driveCheckProblemAlert = UIAlertController(title: "Unable to load drives", message: "Please check that you have a signal, then try again", preferredStyle: UIAlertControllerStyle.alert)
-                    driveCheckProblemAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
-                    driveCheckProblemAlert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.cancel, handler: {(alertAction) -> Void in
+                    let driveCheckProblemAlert = UIAlertController(title: "Unable to load drives", message: "Please check that you have a signal, then try again", preferredStyle: UIAlertController.Style.alert)
+                    driveCheckProblemAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                    driveCheckProblemAlert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.cancel, handler: {(alertAction) -> Void in
                         self.loadFileBrowser() }))
                     self.present(driveCheckProblemAlert, animated: true, completion: nil)
                 }
@@ -376,9 +376,9 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                     // The cancel and default action styles are back to front, as
                     // the cancel option is bold, which we want the 'try again'
                     // option to be chosen by the user
-                    let folderCheckProblemAlert = UIAlertController(title: "Unable to load folder", message: "Please check that you have a signal, then try again", preferredStyle: UIAlertControllerStyle.alert)
-                    folderCheckProblemAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
-                    folderCheckProblemAlert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.cancel, handler: {(alertAction) -> Void in
+                    let folderCheckProblemAlert = UIAlertController(title: "Unable to load folder", message: "Please check that you have a signal, then try again", preferredStyle: UIAlertController.Style.alert)
+                    folderCheckProblemAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
+                    folderCheckProblemAlert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.cancel, handler: {(alertAction) -> Void in
                         self.loadFileBrowser() }))
                     self.present(folderCheckProblemAlert, animated: true, completion: nil)
                 }
@@ -402,7 +402,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter fileType: The type of file according to the HAP+ server
     /// - returns: Is the current item a file or a folder/drive
-    func isFile(_ fileType: String) -> Bool {
+    @objc func isFile(_ fileType: String) -> Bool {
         // Seeing if this is a Directory based on the file type
         // that has been passed - issue #13
         // The "Drive" value is looked for in any part of the
@@ -435,7 +435,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - parameter fileExtension: The extension of the file, or empty if it is a directory
     /// - parameter details: Additional info for the file (size, modified date, etc...)
     /// - parameter writePermission: User has write permission for the item
-    func addFileItem(_ name: String, path: String, type: String, fileExtension: String, details: String, writePermission: Bool) {
+    @objc func addFileItem(_ name: String, path: String, type: String, fileExtension: String, details: String, writePermission: Bool) {
         // Creating an array to hold the current item that is being processed
         var currentItem: [AnyObject] = []
         logger.verbose("Adding item to file array, with details:\n --Name: \(name)\n --Path: \(path)\n --Type: \(type)\n --Extension: \(fileExtension)\n --Details: \(details)\n --Write permission: \(writePermission)")
@@ -459,7 +459,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///                             and the user has chosen to create a new file and
     ///                             not overwrite it, then this is the custom file name
     ///                             that should be used
-    func uploadFile(_ fileFromPhotoLibrary: Bool, customFileName: String, fileExistsCallback:@escaping (_ fileExists: Bool) -> Void) -> Void {
+    @objc func uploadFile(_ fileFromPhotoLibrary: Bool, customFileName: String, fileExistsCallback:@escaping (_ fileExists: Bool) -> Void) -> Void {
         // Holding the location of the file on the device, that
         // is going to be uploaded
         var fileLocation = ""
@@ -525,8 +525,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                     // There was a problem with uploading the file, so let the
                     // user know about it
                     if ((result == false) && (uploading == false)) {
-                        let uploadFailController = UIAlertController(title: "Unable to upload file", message: "The file was not successfully uploaded. Please check and try again", preferredStyle: UIAlertControllerStyle.alert)
-                        uploadFailController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        let uploadFailController = UIAlertController(title: "Unable to upload file", message: "The file was not successfully uploaded. Please check and try again", preferredStyle: UIAlertController.Style.alert)
+                        uploadFailController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                         self.present(uploadFailController, animated: true, completion: nil)
                         logger.error("The file was not successfully uploaded")
                     }
@@ -639,7 +639,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter uploadFileLocations: The on-device file locations of the
     ///                                  files to be uploaded
-    func uploadMultipleFiles(_ uploadFileLocations: NSArray) {
+    @objc func uploadMultipleFiles(_ uploadFileLocations: NSArray) {
         logger.debug("Uploading multiple files from the following locations: \(uploadFileLocations)")
         
         // Saving the total number of file items being uploaded, so
@@ -687,7 +687,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - seealso: uploadMultipleFiles
     /// - seealso: uploadMultipleFilesCheck
-    func uploadMultipleFilesCheck() {
+    @objc func uploadMultipleFilesCheck() {
         // Seeing if there is currently a file being uploaded,
         // or if there is an available slot to attempt the
         // upload, and we haven't reached the total number of
@@ -759,7 +759,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - date: 2016-01-29
     ///
     /// - parameter folderName: The name of the folder to be created
-    func newFolder(_ folderName: String) {
+    @objc func newFolder(_ folderName: String) {
         hudShow("Creating \"" + folderName + "\" folder")
         logger.debug("Folder name from delegate callback: \(folderName)")
         
@@ -782,8 +782,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                         // in this function (where result==false) for more
                         // information on why this is needed
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                            let uploadFailController = UIAlertController(title: "Unable to create folder", message: "The folder was not successfully created. Please check and try again", preferredStyle: UIAlertControllerStyle.alert)
-                            uploadFailController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                            let uploadFailController = UIAlertController(title: "Unable to create folder", message: "The folder was not successfully created. Please check and try again", preferredStyle: UIAlertController.Style.alert)
+                            uploadFailController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                             self.present(uploadFailController, animated: true, completion: nil)
                         })
                         logger.error("The new folder \(folderName) could not be created")
@@ -821,8 +821,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                     self.hudHide()
                     logger.info("The \"\(folderName)\" folder already exists in \"\(self.currentPath)\"")
                     
-                    let folderExistsController = UIAlertController(title: "Folder already exists", message: "The folder already exists in the current folder", preferredStyle: UIAlertControllerStyle.alert)
-                    folderExistsController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    let folderExistsController = UIAlertController(title: "Folder already exists", message: "The folder already exists in the current folder", preferredStyle: UIAlertController.Style.alert)
+                    folderExistsController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                     self.present(folderExistsController, animated: true, completion: nil)
                 })
             }
@@ -836,7 +836,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     // is slightly different from the login view controller one, as we need
     // to get it to show on top of the table view
     // See: http://stackoverflow.com/a/26901328
-    func hudShow(_ detailLabel: String) {
+    @objc func hudShow(_ detailLabel: String) {
         hud = MBProgressHUD.showAdded(to: self.navigationController!.view, animated: true)
         hud.label.text = "Please wait..."
         hud.detailsLabel.text = detailLabel
@@ -852,14 +852,14 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - seealso: hudHide
     ///
     /// - parameter labelText: The text that should be shown for the HUD label
-    func hudUpdateLabel(_ labelText: String) {
+    @objc func hudUpdateLabel(_ labelText: String) {
         hud.detailsLabel.text = labelText
     }
     
     // The following functions look after showing the HUD during the download
     // progress so that the user knows that something is happening.
     // See: http://stackoverflow.com/a/26901328
-    func hudUploadingShow() {
+    @objc func hudUploadingShow() {
         hud = MBProgressHUD.showAdded(to: self.navigationController!.view, animated: true)
         hud.detailsLabel.text = "Uploading..."
         // See: http://stackoverflow.com/a/26882235
@@ -882,7 +882,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter currentDownloadedBytes: The amount in bytes that has been uploaded
     /// - parameter totalBytes: The total amount of bytes that is to be uploaded
-    func hudUpdatePercentage(_ currentUploadedBytes: Int64, totalBytes: Int64) {
+    @objc func hudUpdatePercentage(_ currentUploadedBytes: Int64, totalBytes: Int64) {
         let currentPercentage = Float(currentUploadedBytes) / Float(totalBytes)
         logger.verbose("Current uploaded percentage: \(currentPercentage * 100)%")
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
@@ -890,7 +890,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         })
     }
     
-    func hudHide() {
+    @objc func hudHide() {
         hud.hide(animated: true)
     }
 
@@ -1036,11 +1036,11 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         
         // Deciding if a disclosure indicator ("next arrow") should be shown
         if (!isFile((file[2] as? String)!)) {
-            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
         } else {
             // Removing the disclosure indicator if the current row
             // is a file and not a folder - issue #13
-            cell.accessoryType = UITableViewCellAccessoryType.none
+            cell.accessoryType = UITableViewCell.AccessoryType.none
         }
         
         return cell
@@ -1064,18 +1064,18 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - since: 0.6.0-alpha
     /// - version: 1
     /// - date: 2016-01-20
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         // Seeing if we are showing the user their available drives
         // or if the user is browsing the folder hierarchy
         if (currentPath == "") {
-            return UITableViewCellEditingStyle.none
+            return UITableViewCell.EditingStyle.none
         } else {
-            return UITableViewCellEditingStyle.delete
+            return UITableViewCell.EditingStyle.delete
         }
     }
 
     // Deleting the file item on the currently selected row
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Fetches the current file from the fileItems array
             let file = fileItems[indexPath.row]
@@ -1089,14 +1089,14 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
             
             // Checking with the user that they actually want to
             // delete the file item that they have selected
-            let deleteConfirmation = UIAlertController(title: "Delete " + fileOrFolder, message: "Are you sure that you want to delete this " + fileOrFolder + "?", preferredStyle: UIAlertControllerStyle.alert)
-            deleteConfirmation.addAction(UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {(alertAction) -> Void in
+            let deleteConfirmation = UIAlertController(title: "Delete " + fileOrFolder, message: "Are you sure that you want to delete this " + fileOrFolder + "?", preferredStyle: UIAlertController.Style.alert)
+            deleteConfirmation.addAction(UIAlertAction(title: "Delete", style: UIAlertAction.Style.destructive, handler: {(alertAction) -> Void in
                 self.deleteFile(indexPath, fileOrFolder: fileOrFolder, fileDeletedCallback: { (fileDeleted: Bool) -> Void in
                     // The code in here shouldn't run, as this is only
                     // used for the overwriting file function
                 })
             }))
-            deleteConfirmation.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {(alertAction) -> Void in
+            deleteConfirmation.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {(alertAction) -> Void in
                     // Removing the delete button being shown
                     // See: http://stackoverflow.com/a/22063692
                     self.tableView.setEditing(false, animated: true)
@@ -1165,7 +1165,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - parameter fileOrFolder: Whether the item being deleted is a file
     ///                           or a folder, so that the error message can
     ///                           be customised correctly
-    func deleteFile(_ indexPath: IndexPath, fileOrFolder: String, fileDeletedCallback:@escaping (_ fileDeleted: Bool) -> Void) -> Void {
+    @objc func deleteFile(_ indexPath: IndexPath, fileOrFolder: String, fileDeletedCallback:@escaping (_ fileDeleted: Bool) -> Void) -> Void {
         hudShow("Deleting " + fileOrFolder)
         let deleteItemAtLocation = fileItems[indexPath.row][1] as! String
         logger.info("Attempting to delete the " + fileOrFolder + " located at \(deleteItemAtLocation)")
@@ -1180,8 +1180,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                 // The cancel and default action styles are back to front, as
                 // the cancel option is bold, which we want the 'try again'
                 // option to be chosen by the user
-                let deletionProblemAlert = UIAlertController(title: "Unable to delete " + fileOrFolder, message: "Please check that you have a signal, then try again", preferredStyle: UIAlertControllerStyle.alert)
-                deletionProblemAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: {(alertAction) -> Void in
+                let deletionProblemAlert = UIAlertController(title: "Unable to delete " + fileOrFolder, message: "Please check that you have a signal, then try again", preferredStyle: UIAlertController.Style.alert)
+                deletionProblemAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: {(alertAction) -> Void in
                     // Removing the delete button being shown, if the
                     // user cancels the deletion attempt
                     // See: http://stackoverflow.com/a/22063692
@@ -1190,7 +1190,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                 // Setting the try again button style to be cancel, so
                 // that it is emboldened in the alert and looks like
                 // the default button to press
-                deletionProblemAlert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.cancel, handler: {(alertAction) -> Void in
+                deletionProblemAlert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.cancel, handler: {(alertAction) -> Void in
                     self.deleteFile(indexPath, fileOrFolder: fileOrFolder, fileDeletedCallback: { (fileDeleted: Bool) -> Void in
                         // The code in here shouldn't run, as this is only
                         // used for the overwriting file function
@@ -1245,7 +1245,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter deviceFileLocation: The path to the file on the device (either the
     ///                                 Documents folder: photos, videos; Inbox folder: files)
-    func deleteUploadedLocalFile(_ fileDeviceLocation: URL) {
+    @objc func deleteUploadedLocalFile(_ fileDeviceLocation: URL) {
         // If the file is coming from an external app, the value
         // in fileDeviceLocation may contain encoded characters
         // in the file name, which the "removeItemAtPath" function
@@ -1285,7 +1285,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     }
     
     // MARK: Upload popover
-    func showUploadPopover(_ sender: UIBarButtonItem) {
+    @objc func showUploadPopover(_ sender: UIBarButtonItem) {
         // See: http://www.appcoda.com/presentation-controllers-tutorial/
         // See: http://stackoverflow.com/a/28291804
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -1321,7 +1321,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter fileFromPhotoLibrary: Is the file being uploaded coming from the photo
     ///                                   library on the device, or from another app
-    func showFileExistsMessage(_ fileFromPhotoLibrary: Bool) {
+    @objc func showFileExistsMessage(_ fileFromPhotoLibrary: Bool) {
         // Seeing if the overwrite file alert needs to
         // be shown to the user, once the upload popover
         // has been dismissed
@@ -1355,12 +1355,12 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                 
                 let fileName = String(fileLocation).components(separatedBy: "/").last!
                 
-                let fileExistsController = UIAlertController(title: "File already exists", message: "The file \"\(fileName)\" already exists in the current folder", preferredStyle: UIAlertControllerStyle.alert)
-                fileExistsController.addAction(UIAlertAction(title: "Replace file", style: UIAlertActionStyle.destructive, handler:  {(alertAction) -> Void in
+                let fileExistsController = UIAlertController(title: "File already exists", message: "The file \"\(fileName)\" already exists in the current folder", preferredStyle: UIAlertController.Style.alert)
+                fileExistsController.addAction(UIAlertAction(title: "Replace file", style: UIAlertAction.Style.destructive, handler:  {(alertAction) -> Void in
                     self.overwriteFile(true, fileFromPhotoLibrary: fileFromPhotoLibrary) }))
-                fileExistsController.addAction(UIAlertAction(title: "Create new file", style: UIAlertActionStyle.default, handler:  {(alertAction) -> Void in
+                fileExistsController.addAction(UIAlertAction(title: "Create new file", style: UIAlertAction.Style.default, handler:  {(alertAction) -> Void in
                     self.overwriteFile(false, fileFromPhotoLibrary: fileFromPhotoLibrary) }))
-                fileExistsController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+                fileExistsController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
                 self.present(fileExistsController, animated: true, completion: nil)
                 
                 // Preventing the alert being shown on each
@@ -1390,7 +1390,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///                            current file or create a new one
     /// - parameter fileFromPhotoLibrary: Is the file being uploaded coming from the photo
     ///                                   library on the device, or from another app
-    func overwriteFile(_ overwriteFile: Bool, fileFromPhotoLibrary: Bool) {
+    @objc func overwriteFile(_ overwriteFile: Bool, fileFromPhotoLibrary: Bool) {
         logger.info("Overwrite existing remote file: \(overwriteFile)")
         logger.debug("File exists in photo library: \(fileFromPhotoLibrary)")
         
@@ -1460,8 +1460,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                             // hasn't worked
                             logger.error("Overwriting file deletion succeeded but failed when uploading the file")
                             
-                            let overwriteUploadFailedController = UIAlertController(title: "Problem uploading file", message: "Please rename the file and try uploading it again", preferredStyle: UIAlertControllerStyle.alert)
-                            overwriteUploadFailedController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                            let overwriteUploadFailedController = UIAlertController(title: "Problem uploading file", message: "Please rename the file and try uploading it again", preferredStyle: UIAlertController.Style.alert)
+                            overwriteUploadFailedController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                             self.present(overwriteUploadFailedController, animated: true, completion: nil)
                         })
                     }
@@ -1471,8 +1471,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                 // trying to find the file in the array
                 logger.error("\(fileName) was not found in the current folder")
                 
-                let fileNotFoundController = UIAlertController(title: "Problem uploading file", message: "Please rename the file and try uploading it again", preferredStyle: UIAlertControllerStyle.alert)
-                fileNotFoundController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                let fileNotFoundController = UIAlertController(title: "Problem uploading file", message: "Please rename the file and try uploading it again", preferredStyle: UIAlertController.Style.alert)
+                fileNotFoundController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                 self.present(fileNotFoundController, animated: true, completion: nil)
             }
         } else {
@@ -1522,7 +1522,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///                              the current folder
     /// - parameter PasteItemsCheckingPosition: (Optional) The position in the paste items
     ///                                         array that needs to be modified
-    func checkGeneratedFileName(_ fileName: String, fileFromPhotoLibrary: Bool, pasteItemsArray: [NSArray] = [], pasteItemsCheckingPosition: Int = 0) {
+    @objc func checkGeneratedFileName(_ fileName: String, fileFromPhotoLibrary: Bool, pasteItemsArray: [NSArray] = [], pasteItemsCheckingPosition: Int = 0) {
         // Creating a new file name for the file being uploaded
         let newFileName = generateFileName(fileName)
         
@@ -1572,8 +1572,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                     // hasn't worked
                     logger.error("Generated file name checking succeeded but failed when uploading the file")
                     
-                    let generatedFileNameUploadFailedController = UIAlertController(title: "Problem uploading file", message: "Please rename the file and try uploading it again", preferredStyle: UIAlertControllerStyle.alert)
-                    generatedFileNameUploadFailedController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    let generatedFileNameUploadFailedController = UIAlertController(title: "Problem uploading file", message: "Please rename the file and try uploading it again", preferredStyle: UIAlertController.Style.alert)
+                    generatedFileNameUploadFailedController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                     self.present(generatedFileNameUploadFailedController, animated: true, completion: nil)
                 })
             }
@@ -1598,7 +1598,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter currentFileName: The current name of the file
     ///                              is to renamed
-    func generateFileName(_ currentFileName: String) -> String {
+    @objc func generateFileName(_ currentFileName: String) -> String {
         logger.debug("Current file name and path: \(currentFileName)")
         // Getting the name of the file from the device location. We
         // can just split the path and get the file name from the last
@@ -1698,7 +1698,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - date: 2017-05-08
     ///
     /// - seealso: cancelMultipleSelect
-    func handleLongPress(longPressGesture:UILongPressGestureRecognizer) {
+    @objc func handleLongPress(longPressGesture:UILongPressGestureRecognizer) {
         let press = longPressGesture.location(in: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: press)
         
@@ -1719,7 +1719,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         if indexPath == nil {
             logger.debug("Long press on table view, not row.")
         }
-        else if (longPressGesture.state == UIGestureRecognizerState.began) {
+        else if (longPressGesture.state == UIGestureRecognizer.State.began) {
             logger.debug("Long press on table row at: \(indexPath!.row)")
             cutCopyToggleSelection(indexPath: indexPath!)
             
@@ -1741,7 +1741,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - date: 2017-05-08
     ///
     /// - seealso: handleLongPress
-    func cancelMultipleSelect() {
+    @objc func cancelMultipleSelect() {
         cutCopyModeEnabled = false
         cutCopyFilesList.removeAll()
         
@@ -1777,7 +1777,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - date: 2017-05-08
     ///
     /// - parameter indexPath: The index path of the row selected
-    func cutCopyToggleSelection(indexPath: IndexPath) {
+    @objc func cutCopyToggleSelection(indexPath: IndexPath) {
         logger.debug("Toggling selection for row \(indexPath.row)")
         
         // Seeing if the row is currently already selected, and
@@ -1795,7 +1795,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         } else {
             logger.debug("Adding row \(indexPath.row) to selection")
             cutCopyFilesList.append(indexPath.row)
-            tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableViewScrollPosition.none)
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         }
         
         navigationItem.title = "\(cutCopyFilesList.count) Selected"
@@ -1829,7 +1829,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     ///
     /// - parameter pasteMode: What should be done with the selected
     ///                        items when the paste button is pressed
-    func cutCopyPastePrepare(pasteMode: String) {
+    @objc func cutCopyPastePrepare(pasteMode: String) {
         // Array to hold the paths of the items to be cut
         // or copied
         var pasteItemsList: [String] = []
@@ -1877,7 +1877,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - since: 1.0.0-beta
     /// - version: 1
     /// - date: 2017-05-17
-    func pasteItems() {
+    @objc func pasteItems() {
         // Array with the following items, which are used to generate
         // the JSON request when pasting the item:
         //   * oldPath -> string
@@ -1929,7 +1929,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - parameter items: The list of items to be pasted
     /// - parameter checkPosition: The location to start in the
     ///                            items array on the next recursion
-    func pasteItemsCheck(items: [NSArray], checkPosition: Int) {
+    @objc func pasteItemsCheck(items: [NSArray], checkPosition: Int) {
         // If there are no items left in the array, then the
         // user has skipped pasting any items that had been
         // cut or copied. The HUD can be hidden and this function
@@ -1976,8 +1976,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                 logger.warning("An item with \(fileNameNew!) already exists")
                 var itemsChanged = items as! [[String]]
                 
-                let fileExistsController = UIAlertController(title: "Item already exists", message: "The item \"\(fileNameNew!)\" already exists in the current folder", preferredStyle: UIAlertControllerStyle.alert)
-                fileExistsController.addAction(UIAlertAction(title: "Replace item", style: UIAlertActionStyle.destructive, handler:  {(alertAction) -> Void in
+                let fileExistsController = UIAlertController(title: "Item already exists", message: "The item \"\(fileNameNew!)\" already exists in the current folder", preferredStyle: UIAlertController.Style.alert)
+                fileExistsController.addAction(UIAlertAction(title: "Replace item", style: UIAlertAction.Style.destructive, handler:  {(alertAction) -> Void in
                         // Setting the array item to have "true", so it
                         // will be overwritten when sent to HAP+
                         logger.debug("User has chosen to replace the item \(fileNameNew!) at array position \(checkPosition)")
@@ -1994,13 +1994,13 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
                             self.pasteItemsCheck(items: itemsChanged as [NSArray], checkPosition: checkPosition + 1)
                         }
                     }))
-                fileExistsController.addAction(UIAlertAction(title: "Create new item", style: UIAlertActionStyle.default, handler:  {(alertAction) -> Void in
+                fileExistsController.addAction(UIAlertAction(title: "Create new item", style: UIAlertAction.Style.default, handler:  {(alertAction) -> Void in
                         // Generating a new filename and updating the
                         // array to use it
                         logger.debug("User has chosen to create a new file, based on the file \(fileNameNew!) at array position \(checkPosition)")
                         self.checkGeneratedFileName(filePathNew!, fileFromPhotoLibrary: false, pasteItemsArray: itemsChanged as [NSArray], pasteItemsCheckingPosition: checkPosition)
                     }))
-                fileExistsController.addAction(UIAlertAction(title: "Skip item", style: UIAlertActionStyle.default, handler:  {(alertAction) -> Void in
+                fileExistsController.addAction(UIAlertAction(title: "Skip item", style: UIAlertAction.Style.default, handler:  {(alertAction) -> Void in
                         // Removing the current item from the array, then
                         // call this function again with a same position
                         logger.debug("User has chosen to skip the file \(fileNameNew!) at array position \(checkPosition)")
@@ -2029,7 +2029,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - date: 2017-05-18
     ///
     /// - parameter items: The list of items to be pasted
-    func pasteItem(items: [NSArray]) {
+    @objc func pasteItem(items: [NSArray]) {
         // If there are no items left in the array, then all
         // items have been pasted
         if (items.count == 0) {
@@ -2076,7 +2076,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
     /// - date: 2016-06-16
     ///
     /// - seealso: toggleMasterView
-    func logOutUser() {
+    @objc func logOutUser() {
         // Calling the log out function
         api.logOutUser()
         
@@ -2126,7 +2126,7 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
         return navigationController
     }
     
-    func dismissUploadPopover() {
+    @objc func dismissUploadPopover() {
         // This function has been renamed to dismissUploadPopover
         // from dismiss, as Swift 3 has renamed dismissViewControllerAnimated
         // to dismiss
@@ -2197,8 +2197,8 @@ class MasterViewController: UITableViewController, UISplitViewControllerDelegate
 ///
 /// - seealso: logOutUser
 extension UISplitViewController {
-    func toggleMasterView() {
-        var nextDisplayMode: UISplitViewControllerDisplayMode
+    @objc func toggleMasterView() {
+        var nextDisplayMode: UISplitViewController.DisplayMode
         switch(self.preferredDisplayMode){
         case .primaryHidden:
             nextDisplayMode = .allVisible
@@ -2210,15 +2210,15 @@ extension UISplitViewController {
         }) 
     }
     
-    func showMasterView() {
+    @objc func showMasterView() {
         UIView.animate(withDuration: 0.5, animations: { () -> Void in
-            self.preferredDisplayMode = UISplitViewControllerDisplayMode.allVisible
+            self.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
         }) 
     }
     
-    func hideMasterView() {
+    @objc func hideMasterView() {
         UIView.animate(withDuration: 0.5, animations: { () -> Void in
-            self.preferredDisplayMode = UISplitViewControllerDisplayMode.primaryHidden
+            self.preferredDisplayMode = UISplitViewController.DisplayMode.primaryHidden
         }) 
     }
 }

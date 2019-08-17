@@ -68,34 +68,34 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     let api = HAPi()
     
     // MBProgressHUD variable, so that a download progress bar can be shown
-    var hud : MBProgressHUD = MBProgressHUD()
+    @objc var hud : MBProgressHUD = MBProgressHUD()
     
     // Holding the path that can be used to download
     // the file that the user has selected
-    var fileDownloadPath = ""
+    @objc var fileDownloadPath = ""
     
     // Holding the name of the file to use for the QuickLook controller
-    var fileName = ""
+    @objc var fileName = ""
     
     // Holding the type of file the user has selected, if it is a
     // known format, or the extension if unknown
-    var fileType = ""
+    @objc var fileType = ""
     
     // Holding the file "details" (date modified and size), which are
     // separated in the showFileDetails function
     /// - seealso: showFileDetails
-    var fileDetails = ""
+    @objc var fileDetails = ""
     
     // Saving the extention of the file that is being downloaded
     // so that the QuickLook preview knows what to show
-    var fileExtension = ""
+    @objc var fileExtension = ""
     
     // Setting the location on the device where the file is
-    var fileDeviceLocation = ""
+    @objc var fileDeviceLocation = ""
     
     // Keeping track of if the file has been downloaded, or does
     // authorisation by the user need to be confirmed
-    var fileDownloaded = false
+    @objc var fileDownloaded = false
 
 
     override func viewDidLoad() {
@@ -198,7 +198,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - since: 0.5.0-beta
     /// - version: 3
     /// - date: 2016-01-16
-    func downloadFile() ->Void {
+    @objc func downloadFile() ->Void {
         hudShow()
         
         // Deleting any cached files from the device
@@ -209,8 +209,8 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
             // There was a problem with downloading the file, so let the
             // user know about it
             if ((result == false) && (downloading == false)) {
-                let loginUserFailController = UIAlertController(title: "Unable to download file", message: "The file was not successfully downloaded. Please check and try again", preferredStyle: UIAlertControllerStyle.alert)
-                loginUserFailController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                let loginUserFailController = UIAlertController(title: "Unable to download file", message: "The file was not successfully downloaded. Please check and try again", preferredStyle: UIAlertController.Style.alert)
+                loginUserFailController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                 self.present(loginUserFailController, animated: true, completion: nil)
                 logger.error("The file could not be downloaded")
             }
@@ -245,7 +245,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - since: 0.4.0-beta
     /// - version: 1
     /// - date: 2015-12-23
-    func showFileDetails() {
+    @objc func showFileDetails() {
         lblFileName.text = fileName
         lblFileType.text = fileType
         
@@ -292,7 +292,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     // The following functions look after showing the HUD during the download
     // progress so that the user knows that something is happening.
     // See: http://stackoverflow.com/a/26901328
-    func hudShow() {
+    @objc func hudShow() {
         hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         hud.detailsLabel.text = "Downloading..."
         // See: http://stackoverflow.com/a/26882235
@@ -315,7 +315,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     ///
     /// - parameter currentDownloadedBytes: The amount in bytes that has been downloaded
     /// - parameter totalBytes: The total amount of bytes that is to be downloaded
-    func hudUpdatePercentage(_ currentDownloadedBytes: Int64, totalBytes: Int64) {
+    @objc func hudUpdatePercentage(_ currentDownloadedBytes: Int64, totalBytes: Int64) {
         let currentPercentage = Float(currentDownloadedBytes) / Float(totalBytes)
         logger.verbose("Current downloaded percentage: \(currentPercentage * 100)%")
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
@@ -323,7 +323,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
         })
     }
     
-    func hudHide() {
+    @objc func hudHide() {
         hud.hide(animated: true)
     }
     
@@ -336,7 +336,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - since: 0.4.0-beta
     /// - version: 1
     /// - date: 2015-12-23
-    func quickLookController() {
+    @objc func quickLookController() {
         // Presenting the QuickLook controller to the user
         // Thanks to the following sites for helping me eventually
         // figure it out (here and other parts of this file)
@@ -367,7 +367,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - date: 2016-01-04
     ///
     /// - returns: A formatted path to the local copy of the downloaded file
-    func formatLocalFilePath() -> String {
+    @objc func formatLocalFilePath() -> String {
         // Returning the full path to the downloaded file
         // after removing the 'file://' from the beginning
         var formattedPath = fileDeviceLocation.replacingOccurrences(of: "file://", with: "")
@@ -392,7 +392,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - date: 2016-01-04
     ///
     /// - returns: A path to the device cache directory, or an empty string
-    func getLocalCacheFolderFileListing() -> String {
+    @objc func getLocalCacheFolderFileListing() -> String {
         do {
             // Getting a list of documents in the caches folder
             // See: http://stackoverflow.com/a/24055475
@@ -437,16 +437,16 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - seealso: largeFileSize
     ///
     /// - returns: Can the selected file be downloaded
-    func downloadLargeFile() -> Bool {
+    @objc func downloadLargeFile() -> Bool {
         // Seeing if the currently selected file is larger than the
         // maximum set for the device
         if (largeFileSize()) {
             // Requesting from the user if the file can be downloaded
             logger.debug("Requesting user permission to download large file")
-            let confirmDownloadLargeFile = UIAlertController(title: "Download Large File", message: "This may take time or use up some of your device data allowances", preferredStyle: UIAlertControllerStyle.alert)
-            confirmDownloadLargeFile.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {(alertAction) -> Void in
+            let confirmDownloadLargeFile = UIAlertController(title: "Download Large File", message: "This may take time or use up some of your device data allowances", preferredStyle: UIAlertController.Style.alert)
+            confirmDownloadLargeFile.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {(alertAction) -> Void in
                 self.downloadFile() }))
-            confirmDownloadLargeFile.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil))
+            confirmDownloadLargeFile.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: nil))
             self.present(confirmDownloadLargeFile, animated: true, completion: nil)
             
             // The alert view is shown, and then the code continues, as
@@ -482,7 +482,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - seealso: downloadLargeFile
     ///
     /// - returns: Is the currently selected file considered "large"
-    func largeFileSize() -> Bool {
+    @objc func largeFileSize() -> Bool {
         // Setting up the maximum sizes of the files that can be
         // downloaded without asking for permission
         let maximumWWANFileSize : Float = 20
@@ -566,7 +566,7 @@ class DetailViewController: UIViewController, QLPreviewControllerDataSource {
     /// - since: 0.8.0-alpha
     /// - version: 2
     /// - date: 2016-06-29
-    func deleteCacheFiles() {
+    @objc func deleteCacheFiles() {
         // Getting a list of the files currently in the caches
         // directory before any deletion attempt happens
         var cacheDirectoryPath = getLocalCacheFolderFileListing()

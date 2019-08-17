@@ -29,7 +29,7 @@ class FileProvider: NSFileProviderExtension {
     // functions in it can be used in the document provider
     let api = HAPi()
 
-    var fileCoordinator: NSFileCoordinator {
+    @objc var fileCoordinator: NSFileCoordinator {
         let fileCoordinator = NSFileCoordinator()
         fileCoordinator.purposeIdentifier = self.providerIdentifier
         return fileCoordinator
@@ -48,7 +48,7 @@ class FileProvider: NSFileProviderExtension {
         })
     }
 
-    func providePlaceholder(at url: URL, completionHandler: ((_ error: NSError?) -> Void)?) {
+    @objc func providePlaceholder(at url: URL, completionHandler: ((_ error: NSError?) -> Void)?) {
         // Should call writePlaceholderAtURL(_:withMetadata:error:) with the placeholder URL, then call the completion handler with the error if applicable.
         let fileName = url.lastPathComponent
     
@@ -66,7 +66,7 @@ class FileProvider: NSFileProviderExtension {
         completionHandler?(nil)
     }
 
-    func startProvidingItem(at url: URL, completionHandler: ((_ error: NSError?) -> Void)?) {
+    @objc func startProvidingItem(at url: URL, completionHandler: ((_ error: NSError?) -> Void)?) {
         let fileManager = FileManager()
         let path = url.path
         if fileManager.fileExists(atPath: path) { //1

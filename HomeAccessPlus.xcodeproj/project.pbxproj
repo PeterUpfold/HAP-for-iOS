@@ -369,7 +369,6 @@
 				FC2AEBE81C653C4A009BB69C /* Sources */,
 				FC2AEBE91C653C4A009BB69C /* Frameworks */,
 				FC2AEBEA1C653C4A009BB69C /* Resources */,
-				0F3350DC0A463C9EC7B22D78 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -389,7 +388,6 @@
 				FC2AEBF61C653C4A009BB69C /* Sources */,
 				FC2AEBF71C653C4A009BB69C /* Frameworks */,
 				FC2AEBF81C653C4A009BB69C /* Resources */,
-				A69732884EA61A5CCE8EFAAF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -409,7 +407,6 @@
 				FC78D3061C5D7E5E00254B07 /* Frameworks */,
 				FC78D3071C5D7E5E00254B07 /* Resources */,
 				187DE331478D5B79CEDB32D7 /* [CP] Embed Pods Frameworks */,
-				ABF41009F90A4CDE77B1FFE8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -432,7 +429,6 @@
 				FCB1D9E41C09F54C00DEC02E /* Resources */,
 				FC2AEC0D1C653C4A009BB69C /* Embed App Extensions */,
 				9939FE849120BA5E9C995856 /* [CP] Embed Pods Frameworks */,
-				2280B45DB45C8CE1ABA225C1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -454,7 +450,6 @@
 				FCB1D9F91C09F54C00DEC02E /* Frameworks */,
 				FCB1D9FA1C09F54C00DEC02E /* Resources */,
 				325233AED1328DC6985B1A75 /* [CP] Embed Pods Frameworks */,
-				10945129320E503190FE5D90 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -479,22 +474,22 @@
 					FC2AEBEB1C653C4A009BB69C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = 4ES87YFE58;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 					};
 					FC2AEBF91C653C4A009BB69C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = 4ES87YFE58;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 					};
 					FC78D3081C5D7E5E00254B07 = {
 						CreatedOnToolsVersion = 7.1.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 						TestTargetID = FCB1D9E51C09F54C00DEC02E;
 					};
 					FCB1D9E51C09F54C00DEC02E = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = 4ES87YFE58;
-						LastSwiftMigration = 0820;
+						DevelopmentTeam = 4P6R7ZH883;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -509,7 +504,7 @@
 					};
 					FCB1D9FB1C09F54C00DEC02E = {
 						CreatedOnToolsVersion = 7.1.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 						TestTargetID = FCB1D9E51C09F54C00DEC02E;
 					};
 				};
@@ -519,6 +514,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -580,49 +576,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0F3350DC0A463C9EC7B22D78 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlusDocumentProvider/Pods-HomeAccessPlusDocumentProvider-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		10945129320E503190FE5D90 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlusTests/Pods-HomeAccessPlusTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		1736F34D33DE7EFCBDAA2BE0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HomeAccessPlusUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		187DE331478D5B79CEDB32D7 /* [CP] Embed Pods Frameworks */ = {
@@ -631,13 +600,36 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HomeAccessPlusUITests/Pods-HomeAccessPlusUITests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework",
+				"${BUILT_PRODUCTS_DIR}/Font-Awesome-Swift/Font_Awesome_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjcExceptionBridging/ObjcExceptionBridging.framework",
+				"${BUILT_PRODUCTS_DIR}/PermissionScope/PermissionScope.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/XCGLogger/XCGLogger.framework",
+				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKImagePickerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Font_Awesome_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjcExceptionBridging.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PermissionScope.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XCGLogger.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlusUITests/Pods-HomeAccessPlusUITests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HomeAccessPlusUITests/Pods-HomeAccessPlusUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1C9934C22D0EDB626214EBD6 /* [CP] Check Pods Manifest.lock */ = {
@@ -646,28 +638,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HomeAccessPlusTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		2280B45DB45C8CE1ABA225C1 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlus/Pods-HomeAccessPlus-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		325233AED1328DC6985B1A75 /* [CP] Embed Pods Frameworks */ = {
@@ -676,13 +656,36 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HomeAccessPlusTests/Pods-HomeAccessPlusTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework",
+				"${BUILT_PRODUCTS_DIR}/Font-Awesome-Swift/Font_Awesome_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjcExceptionBridging/ObjcExceptionBridging.framework",
+				"${BUILT_PRODUCTS_DIR}/PermissionScope/PermissionScope.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/XCGLogger/XCGLogger.framework",
+				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKImagePickerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Font_Awesome_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjcExceptionBridging.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PermissionScope.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XCGLogger.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlusTests/Pods-HomeAccessPlusTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HomeAccessPlusTests/Pods-HomeAccessPlusTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		70100863C8E5AECDAD3CFF17 /* [CP] Check Pods Manifest.lock */ = {
@@ -691,13 +694,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HomeAccessPlus-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		75E4AF7DCDF5556588C0C91A /* [CP] Check Pods Manifest.lock */ = {
@@ -706,13 +712,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HomeAccessPlusDocumentProviderFileProvider-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9939FE849120BA5E9C995856 /* [CP] Embed Pods Frameworks */ = {
@@ -721,13 +730,36 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HomeAccessPlus/Pods-HomeAccessPlus-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework",
+				"${BUILT_PRODUCTS_DIR}/Font-Awesome-Swift/Font_Awesome_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjcExceptionBridging/ObjcExceptionBridging.framework",
+				"${BUILT_PRODUCTS_DIR}/PermissionScope/PermissionScope.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/XCGLogger/XCGLogger.framework",
+				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKImagePickerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Font_Awesome_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjcExceptionBridging.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PermissionScope.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XCGLogger.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlus/Pods-HomeAccessPlus-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HomeAccessPlus/Pods-HomeAccessPlus-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9C72761E3F6020ED60E85C1A /* [CP] Check Pods Manifest.lock */ = {
@@ -736,43 +768,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HomeAccessPlusDocumentProvider-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A69732884EA61A5CCE8EFAAF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlusDocumentProviderFileProvider/Pods-HomeAccessPlusDocumentProviderFileProvider-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		ABF41009F90A4CDE77B1FFE8 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeAccessPlusUITests/Pods-HomeAccessPlusUITests-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FC2AEC0E1C6547B8009BB69C /* ShellScript */ = {
@@ -812,7 +817,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n# From: http://invisiblepixels.org/InvisibleWords/2015/02/06/automatically-incrementing-version-and-build-numbers/\n# The location of the plist file is provided by Xcode in the environment variable PRODUCT_SETTINGS_PATH\n# It is wrapped in quotes in case the path has a space in its name.\n\n# The output of any echo statements can be found in the Xcode build logs.\n\n# You need to include the whole path to the PlistBuddy executable because it's not in $PATH by default.\nOLD_NUMBER=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$PRODUCT_SETTINGS_PATH\"`\n\n# If the build number key doesn't exist in the plist, we'll add it by setting its initial value to 1.\nif [ $? -ne 0 ]\nthen\nSTARTING_NUMBER=1\necho \"No build number present. Starting from ${STARTING_NUMBER}.\"\n`/usr/libexec/PlistBuddy -c \"Add CFBundleVersion string $STARTING_NUMBER\" \"$PRODUCT_SETTINGS_PATH\"`\nexit 0\nfi\n\n# Only reach this point if the build key exists in the plist file.\n# Do the increment. This can be as complicated as you want.\n# Might need a scripting language with better maths capabilities though if you want something truly tricky.\nNEW_NUMBER=$((OLD_NUMBER+=1))\necho \"NEW_NUMBER $NEW_NUMBER\"\n\n# Write it back to the plist\n`/usr/libexec/PlistBuddy -c \"Set CFBundleVersion $NEW_NUMBER\" \"$PRODUCT_SETTINGS_PATH\"`";
+			shellScript = "#!/bin/bash\n\n# From: http://invisiblepixels.org/InvisibleWords/2015/02/06/automatically-incrementing-version-and-build-numbers/\n# The location of the plist file is provided by Xcode in the environment variable PRODUCT_SETTINGS_PATH\n# It is wrapped in quotes in case the path has a space in its name.\n\n# The output of any echo statements can be found in the Xcode build logs.\n\n# You need to include the whole path to the PlistBuddy executable because it's not in $PATH by default.\nOLD_NUMBER=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$PRODUCT_SETTINGS_PATH\"`\n\n# If the build number key doesn't exist in the plist, we'll add it by setting its initial value to 1.\nif [ $? -ne 0 ]\nthen\nSTARTING_NUMBER=1\necho \"No build number present. Starting from ${STARTING_NUMBER}.\"\n`/usr/libexec/PlistBuddy -c \"Add CFBundleVersion string $STARTING_NUMBER\" \"$PRODUCT_SETTINGS_PATH\"`\nexit 0\nfi\n\n# Only reach this point if the build key exists in the plist file.\n# Do the increment. This can be as complicated as you want.\n# Might need a scripting language with better maths capabilities though if you want something truly tricky.\nNEW_NUMBER=$((OLD_NUMBER+=1))\necho \"NEW_NUMBER $NEW_NUMBER\"\n\n# Write it back to the plist\n`/usr/libexec/PlistBuddy -c \"Set CFBundleVersion $NEW_NUMBER\" \"$PRODUCT_SETTINGS_PATH\"`\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -936,11 +941,11 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = HomeAccessPlusDocumentProvider/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlus.DocumentProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.DocumentProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -954,11 +959,11 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = HomeAccessPlusDocumentProvider/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlus.DocumentProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.DocumentProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -972,11 +977,11 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = HomeAccessPlusDocumentProviderFileProvider/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlus.DocumentProviderFileProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.DocumentProviderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -990,11 +995,11 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = HomeAccessPlusDocumentProviderFileProvider/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlus.DocumentProviderFileProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.DocumentProviderFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -1004,9 +1009,9 @@
 			buildSettings = {
 				INFOPLIST_FILE = HomeAccessPlusUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlusUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.HomeAccessPlusUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = HomeAccessPlus;
 				USES_XCTRUNNER = YES;
 			};
@@ -1018,9 +1023,9 @@
 			buildSettings = {
 				INFOPLIST_FILE = HomeAccessPlusUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlusUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.HomeAccessPlusUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 				TEST_TARGET_NAME = HomeAccessPlus;
 				USES_XCTRUNNER = YES;
 			};
@@ -1123,6 +1128,7 @@
 				CODE_SIGN_ENTITLEMENTS = HomeAccessPlus/HomeAccessPlus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4P6R7ZH883;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					TARGET_IS_APP,
@@ -1130,10 +1136,10 @@
 				INFOPLIST_FILE = HomeAccessPlus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlus;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1146,6 +1152,7 @@
 				CODE_SIGN_ENTITLEMENTS = HomeAccessPlus/HomeAccessPlus.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 4P6R7ZH883;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					TARGET_IS_APP,
@@ -1153,10 +1160,10 @@
 				INFOPLIST_FILE = HomeAccessPlus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlus;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -1167,9 +1174,9 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = HomeAccessPlusTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlusTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.HomeAccessPlusTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HomeAccessPlus.app/HomeAccessPlus";
 			};
 			name = Debug;
@@ -1181,9 +1188,9 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = HomeAccessPlusTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.co.stuajnht.ios.HomeAccessPlusTests;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.org.upfold.HomeAccessPlus.HomeAccessPlusTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HomeAccessPlus.app/HomeAccessPlus";
 			};
 			name = Release;

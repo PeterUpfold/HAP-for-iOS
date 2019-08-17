@@ -35,9 +35,9 @@ import DKImagePickerController
 
 open class UploadPopoverCustomCamera: UIImagePickerController, DKImagePickerControllerCameraProtocol, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var didCancel: (() -> Void)?
-    var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
-    var didFinishCapturingVideo: ((_ videoURL: URL) -> Void)?
+    @objc var didCancel: (() -> Void)?
+    @objc var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
+    @objc var didFinishCapturingVideo: ((_ videoURL: URL) -> Void)?
     
     public func setDidCancel(block: @escaping () -> Void) {
         self.didCancel = block
@@ -61,14 +61,17 @@ open class UploadPopoverCustomCamera: UIImagePickerController, DKImagePickerCont
     
     // MARK: - UIImagePickerControllerDelegate methods
     
-    open func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let mediaType = info[UIImagePickerControllerMediaType] as! String
+    open func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
+        let mediaType = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaType)] as! String
         
         if mediaType == kUTTypeImage as String {
-            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+            let image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage
             self.didFinishCapturingImage?(image)
         } else if mediaType == kUTTypeMovie as String {
-            let videoURL = info[UIImagePickerControllerMediaURL] as! URL
+            let videoURL = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaURL)] as! URL
             self.didFinishCapturingVideo?(videoURL)
         }
     }
@@ -77,4 +80,14 @@ open class UploadPopoverCustomCamera: UIImagePickerController, DKImagePickerCont
         self.didCancel?()
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }

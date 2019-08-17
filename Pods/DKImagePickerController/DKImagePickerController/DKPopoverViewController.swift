@@ -10,7 +10,7 @@ import UIKit
 
 open class DKPopoverViewController: UIViewController {
     
-    open class func popoverViewController(_ viewController: UIViewController, fromView: UIView) {
+    @objc open class func popoverViewController(_ viewController: UIViewController, fromView: UIView) {
         let window = UIApplication.shared.keyWindow!
         
         let popoverViewController = DKPopoverViewController()
@@ -19,13 +19,13 @@ open class DKPopoverViewController: UIViewController {
         popoverViewController.fromView = fromView
         
         popoverViewController.showInView(window)
-        window.rootViewController!.addChildViewController(popoverViewController)
+        window.rootViewController!.addChild(popoverViewController)
     }
     
-    open class func dismissPopoverViewController() {
+    @objc open class func dismissPopoverViewController() {
         let window = UIApplication.shared.keyWindow!
 
-        for vc in window.rootViewController!.childViewControllers {
+        for vc in window.rootViewController!.children {
             if vc is DKPopoverViewController {
                 (vc as! DKPopoverViewController).dismiss()
             }
@@ -34,7 +34,7 @@ open class DKPopoverViewController: UIViewController {
     
     private class DKPopoverView: UIView {
         
-        var contentView: UIView! {
+        @objc var contentView: UIView! {
             didSet {
                 contentView.layer.cornerRadius = 5
 				contentView.clipsToBounds = true
@@ -43,8 +43,8 @@ open class DKPopoverViewController: UIViewController {
             }
         }
         
-        let arrowWidth: CGFloat = 20
-        let arrowHeight: CGFloat = 10
+        @objc let arrowWidth: CGFloat = 20
+        @objc let arrowHeight: CGFloat = 10
         fileprivate let arrowImageView: UIImageView = UIImageView()
         
         override init(frame: CGRect) {
@@ -59,7 +59,7 @@ open class DKPopoverViewController: UIViewController {
             self.commonInit()
         }
         
-        func commonInit() {
+        @objc func commonInit() {
             arrowImageView.image = self.arrowImage()
             self.addSubview(arrowImageView)
         }
@@ -71,7 +71,7 @@ open class DKPopoverViewController: UIViewController {
             self.contentView.frame = CGRect(x: 0, y: self.arrowHeight, width: self.bounds.width, height: self.bounds.height - arrowHeight)
         }
         
-        func arrowImage() -> UIImage {
+        @objc func arrowImage() -> UIImage {
             UIGraphicsBeginImageContextWithOptions(CGSize(width: arrowWidth, height: arrowHeight), false, UIScreen.main.scale)
             
             let context = UIGraphicsGetCurrentContext()
@@ -97,8 +97,8 @@ open class DKPopoverViewController: UIViewController {
         }
     }
     
-    var contentViewController: UIViewController!
-    var fromView: UIView!
+    @objc var contentViewController: UIViewController!
+    @objc var fromView: UIView!
     private let popoverView = DKPopoverView()
     
     override open func loadView() {
@@ -106,7 +106,7 @@ open class DKPopoverViewController: UIViewController {
         
         let backgroundView = UIControl(frame: self.view.frame)
         backgroundView.backgroundColor = UIColor.clear
-        backgroundView.addTarget(self, action: #selector(dismiss as (Void) -> Void), for: .touchUpInside)
+        backgroundView.addTarget(self, action: #selector(dismiss as () -> Void), for: .touchUpInside)
         backgroundView.autoresizingMask = self.view.autoresizingMask
         self.view = backgroundView
     }
@@ -126,7 +126,7 @@ open class DKPopoverViewController: UIViewController {
         })
     }
     
-    func showInView(_ view: UIView) {
+    @objc func showInView(_ view: UIView) {
 		view.addSubview(self.view)
 		
 		self.popoverView.contentView = self.contentViewController.view
@@ -139,21 +139,21 @@ open class DKPopoverViewController: UIViewController {
         }, completion: nil)
     }
     
-    func dismiss() {
+    @objc func dismiss() {
         UIView.animate(withDuration: 0.2, animations: {
             self.popoverView.transform = self.popoverView.transform.translatedBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaledBy(x: 0.01, y: 0.01)
             self.view.backgroundColor = UIColor.clear
         }, completion: { result in
             self.view.removeFromSuperview()
-            self.removeFromParentViewController()
+            self.removeFromParent()
         }) 
     }
 	
-	func calculatePopoverViewFrame() -> CGRect {
+	@objc func calculatePopoverViewFrame() -> CGRect {
 		let popoverY = self.fromView.convert(self.fromView.frame.origin, to: self.view).y + self.fromView.bounds.height
 
 		var popoverWidth = self.contentViewController.preferredContentSize.width
-		if popoverWidth == UIViewNoIntrinsicMetric {
+		if popoverWidth == UIView.noIntrinsicMetric {
 			if UI_USER_INTERFACE_IDIOM() == .pad {
 				popoverWidth = self.view.bounds.width * 0.6
 			} else {

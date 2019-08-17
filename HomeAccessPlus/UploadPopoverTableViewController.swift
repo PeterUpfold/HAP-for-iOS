@@ -97,7 +97,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     
     // Creating an instance of an image picker controller
     // See: http://www.codingexplorer.com/choosing-images-with-uiimagepickercontroller-in-swift/
-    let imagePicker = UIImagePickerController()
+    @objc let imagePicker = UIImagePickerController()
     
     // Creating a reference to the upload file delegate
     var delegate: uploadFileDelegate?
@@ -106,25 +106,25 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     // that we can ask the user for access to the photos
     // library, and a separate instance to ask for access
     // to the camera and microphone
-    let pscopePhotos = PermissionScope()
-    let pscopeCamera = PermissionScope()
+    @objc let pscopePhotos = PermissionScope()
+    @objc let pscopeCamera = PermissionScope()
     
     // Holding a reference to see if the popover is being
     // shown on the file browser "My Drives" view, so that
     // it can be used to disable access to most table cells
-    var showingOnEmptyFilePath = false
+    @objc var showingOnEmptyFilePath = false
     
     // Holding a reference to see if the popover is being
     // shown in a directory where the user does or doesn't have
     // write permission, so that it can be used to disabled
     // access to any "upload" table cells
-    var writeGranted = false
+    @objc var writeGranted = false
     
     // Holding the number of items selected in the file browser
     // so that it can be shown on the cut / copy rows. This is
     // also used to see if there are any items selected to
     // enable or disable to row items
-    var cutCopyItems = 0
+    @objc var cutCopyItems = 0
     
     // Used to hold a string of if the alert being shown to
     // the user is to create a new folder or to prompt for a
@@ -134,12 +134,12 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     // keyboard
     // - seealso: textFieldShouldReturn
     // - seealso: tableView:didSelectRowAtIndexPath
-    var alertMode = ""
+    @objc var alertMode = ""
     
     // Holding a reference to the currently selected table
     // row, so that if the user cancels the image picker,
     // it can be deselected
-    var currentlySelectedRow : IndexPath?
+    @objc var currentlySelectedRow : IndexPath?
     
     /// Array to hold the number of table sections and rows
     /// shown in the popover
@@ -152,7 +152,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// If there are any additional sections or rows added to
     /// the table, then this array needs to also be updated to
     /// allow them to be shown to the user
-    let tableSections : [[String]] = [["Upload", "4"], ["Edit", "3"], ["Create", "2"], ["LogOut", "1"], ["Debug", "1"]]
+    @objc let tableSections : [[String]] = [["Upload", "4"], ["Edit", "3"], ["Create", "2"], ["LogOut", "1"], ["Debug", "1"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -292,7 +292,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
             imagePicker.navigationBar.barTintColor = UIColor(hexString: hapMainColour)
             imagePicker.navigationBar.tintColor = UIColor.flatWhite()
             imagePicker.navigationBar.isTranslucent = false
-            imagePicker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.flatWhite()]
+            imagePicker.navigationBar.titleTextAttributes = convertToOptionalNSAttributedStringKeyDictionary([NSAttributedString.Key.foregroundColor.rawValue:UIColor.flatWhite()])
         }
         
         // If the user has logged out, but app restoration makes it
@@ -306,8 +306,8 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
         // the user by transitioning back to the login view controller
         if settings!.string(forKey: settingsUsername) == nil {
             logger.error("Previous user logged off, but app restoration makes it look like they are still logged on. Force showing the login view controller")
-            let logoutFailController = UIAlertController(title: "Logging Off", message: "The previous user has logged out. Please log in again", preferredStyle: UIAlertControllerStyle.alert)
-            logoutFailController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { Void in
+            let logoutFailController = UIAlertController(title: "Logging Off", message: "The previous user has logged out. Please log in again", preferredStyle: UIAlertController.Style.alert)
+            logoutFailController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { Void in
                 self.logOutUser(true, username: "")
             }))
             self.present(logoutFailController, animated: true, completion: nil)
@@ -620,7 +620,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
             // Note: Continue is used instead of create, as it
             //       then keeps the same description as the
             //       keyboard return key
-            let action = UIAlertAction(title: "Continue", style: UIAlertActionStyle.cancel, handler: {(paramAction:UIAlertAction!) in
+            let action = UIAlertAction(title: "Continue", style: UIAlertAction.Style.cancel, handler: {(paramAction:UIAlertAction!) in
                     if let textFields = newFolderAlert?.textFields{
                         let theTextFields = textFields as [UITextField]
                         let enteredText = theTextFields[0].text
@@ -634,7 +634,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
                     }
                 })
             
-            newFolderAlert!.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: { Void in
+            newFolderAlert!.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: { Void in
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }))
             
@@ -740,7 +740,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
                     // Note: Continue is used instead of create, as it
                     //       then keeps the same description as the
                     //       keyboard return key
-                    let action = UIAlertAction(title: "Continue", style: UIAlertActionStyle.cancel, handler: {(paramAction:UIAlertAction!) in
+                    let action = UIAlertAction(title: "Continue", style: UIAlertAction.Style.cancel, handler: {(paramAction:UIAlertAction!) in
                         if let textFields = userLogOutAlert?.textFields{
                             let theTextFields = textFields as [UITextField]
                             let usernameText = theTextFields[0].text
@@ -756,7 +756,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
                         }
                     })
                     
-                    userLogOutAlert!.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: { Void in
+                    userLogOutAlert!.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: { Void in
                         self.tableView.deselectRow(at: indexPath, animated: true)
                     }))
                     
@@ -800,8 +800,8 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
             } else {
                 logger.error("There was a problem creating the zipped log files")
                 
-                let zipFailController = UIAlertController(title: "Unable to zip log files", message: "The log files were not able to be zipped for upload", preferredStyle: UIAlertControllerStyle.alert)
-                zipFailController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { Void in
+                let zipFailController = UIAlertController(title: "Unable to zip log files", message: "The log files were not able to be zipped for upload", preferredStyle: UIAlertController.Style.alert)
+                zipFailController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { Void in
                     self.tableView.deselectRow(at: indexPath, animated: true)
                 }))
                 self.present(zipFailController, animated: true, completion: nil)
@@ -823,7 +823,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - date: 2016-01-07
     ///
     /// - returns: The file name of the file on the device
-    func getFileName() -> String {
+    @objc func getFileName() -> String {
         // Getting the name of the file that is being uploaded from the
         // location of the file on the device
         let pathArray = settings!.string(forKey: settingsUploadFileLocation)!.components(separatedBy: "/")
@@ -842,15 +842,18 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - since: 0.5.0-beta
     /// - version: 4
     /// - date: 2016-05-14
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
         // Getting the type of file the user has selected, as it
         // is stored in different locations based on what it is
-        let fileMediaType = info[UIImagePickerControllerMediaType]!
+        let fileMediaType = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaType)]!
         logger.debug("The media file picked by the user is a: \(fileMediaType)")
         
         // Getting the location of the image on the deivce. This is
         // not a standard file:// url but a special assets-library://
-        let fileDeviceLocation = info[UIImagePickerControllerReferenceURL]!
+        let fileDeviceLocation = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.referenceURL)]!
         logger.debug("Picked media file location on device: \(fileDeviceLocation)")
         
         // Writing the file that has been selected from the library
@@ -872,7 +875,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
         } else {
             if (fileMediaType as! String == "public.movie") {
                 logger.debug("Media file selected is a video")
-                imagePath = createLocalVideo(info[UIImagePickerControllerMediaURL] as! URL)
+                imagePath = createLocalVideo(info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.mediaURL)] as! URL)
             } else {
                 logger.error("Unable to get the selected image")
                 return
@@ -950,8 +953,8 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
             
             // Showing a message to the user that the file was not able
             // to be uploaded
-            let invalidFileNameController = UIAlertController(title: "Unable to Upload File", message: "This file is not able to be uploaded to the Home Access Plus+ server", preferredStyle: UIAlertControllerStyle.alert)
-            invalidFileNameController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            let invalidFileNameController = UIAlertController(title: "Unable to Upload File", message: "This file is not able to be uploaded to the Home Access Plus+ server", preferredStyle: UIAlertController.Style.alert)
+            invalidFileNameController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(invalidFileNameController, animated: true, completion: nil)
             
             // Deselecting the selected row, so that it is not kept
@@ -1016,7 +1019,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - parameter selectedRowIndexPath: The currently selected upload popover table row
     ///                                   so it can be deselected if the user cancels the
     ///                                   multi picker
-    func showMultiPicker(_ mediaType: DKImagePickerControllerAssetType, selectedRowIndexPath: IndexPath) {
+    @objc func showMultiPicker(_ mediaType: DKImagePickerControllerAssetType, selectedRowIndexPath: IndexPath) {
         // Creating an instance of the multi picker, so that
         // users can upload multiple photos or videos at once
         let multiPickerController = DKImagePickerController()
@@ -1140,7 +1143,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - parameter selectedRowIndexPath: The currently selected upload popover table row
     ///                                   so it can be deselected if the user cancels the
     ///                                   camera
-    func showCamera(selectedRowIndexPath: IndexPath) {
+    @objc func showCamera(selectedRowIndexPath: IndexPath) {
         // Creating an instance of the custom camera class, so
         // that photos and videos can be taken
         let cameraController = UploadPopoverCustomCamera()
@@ -1157,7 +1160,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
             //       createLocalImage function
             var imagePath = self.getDocumentsDirectory()
             imagePath = imagePath.appendingPathComponent("capturedphoto.jpg") as NSString
-            if let jpegData = UIImageJPEGRepresentation(image, 80) {
+            if let jpegData = image.jpegData(compressionQuality: 80) {
                 try? jpegData.write(to: URL(fileURLWithPath: imagePath as String), options: [.atomic])
             }
             
@@ -1233,7 +1236,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     ///                           the name of the file from
     /// - parameter multiPickerUsed: If the multi picker was used to select the file
     /// - returns: The path to the image in the app
-    func createLocalImage(_ newImage: UIImage, fileLocation: URL, multiPickerUsed: Bool) -> String {
+    @objc func createLocalImage(_ newImage: UIImage, fileLocation: URL, multiPickerUsed: Bool) -> String {
         // Seeing if the file name should be generated from the on
         // device location, or just to use the last part of the path.
         // This depends on if the multi picker was used, as it puts a
@@ -1250,7 +1253,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
             imagePath = imagePath.appendingPathComponent(createFileName(fileLocation, imageFile: true)) as NSString
         }
         
-        if let jpegData = UIImageJPEGRepresentation(newImage, 80) {
+        if let jpegData = newImage.jpegData(compressionQuality: 80) {
             logger.verbose("Before writing image to documents folder")
             
             try? jpegData.write(to: URL(fileURLWithPath: imagePath as String), options: [.atomic])
@@ -1279,7 +1282,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - parameter fileLocation: The location in the asset library, to generate
     ///                           the name of the file from
     /// - returns: The path to the video in the app
-    func createLocalVideo(_ fileLocation: URL) -> String {
+    @objc func createLocalVideo(_ fileLocation: URL) -> String {
         let videoData = try? Data(contentsOf: fileLocation)
         logger.debug("Location of video data: \(fileLocation)")
         
@@ -1320,7 +1323,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     ///                           the name of the file from
     /// - returns: The path to the file in the app, or an empty string
     ///            if a valid file name could not be generated
-    func createLocalFile(_ fileLocation: URL) -> String {
+    @objc func createLocalFile(_ fileLocation: URL) -> String {
         let fileData = try? Data(contentsOf: fileLocation)
         logger.debug("Location of file data: \(fileLocation)")
         
@@ -1398,7 +1401,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     ///                        a hardcoded extension of ".jpg" needs to be added,
     ///                        as the app is creating a JPEG file
     /// - returns: The name of the file
-    func createFileName(_ fileLocation: URL, imageFile: Bool) -> String {
+    @objc func createFileName(_ fileLocation: URL, imageFile: Bool) -> String {
         // Storing the name of the file that we will be showing the user
         var fileName = ""
         
@@ -1466,7 +1469,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     ///
     /// - parameter folderName: The name of the folder that is to
     ///                         be created
-    func createFolder(_ folderName: String) {
+    @objc func createFolder(_ folderName: String) {
         logger.debug("New folder name: \(folderName)")
         
         // Calling the newFolder delegate function, so that
@@ -1505,7 +1508,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     ///
     /// - parameter performLogOut: If the user can be logged out,
     ///                            of if checks need to be completed first
-    func logOutUser(_ performLogOut: Bool, username: String) {
+    @objc func logOutUser(_ performLogOut: Bool, username: String) {
         // Allowing the user to be logged out if the checks have
         // come back successfully
         if (performLogOut) {
@@ -1558,8 +1561,8 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
                         settings!.set(currentUsername, forKey: settingsUsername)
                         settings!.set(currentUserRoles, forKey: settingsUserRoles)
                         
-                        let invalidUserNameController = UIAlertController(title: "Unable to Log Out", message: "The username entered is not an authenticated user", preferredStyle: UIAlertControllerStyle.alert)
-                        invalidUserNameController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {(alertAction) -> Void in
+                        let invalidUserNameController = UIAlertController(title: "Unable to Log Out", message: "The username entered is not an authenticated user", preferredStyle: UIAlertController.Style.alert)
+                        invalidUserNameController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {(alertAction) -> Void in
                             self.tableView.deselectRow(at: self.currentlySelectedRow!, animated: true) }))
                         self.present(invalidUserNameController, animated: true, completion: nil)
                     } else {
@@ -1578,10 +1581,10 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
                     settings!.set(currentUsername, forKey: settingsUsername)
                     settings!.set(currentUserRoles, forKey: settingsUserRoles)
                     
-                    let userNameProblemController = UIAlertController(title: "Unable to Log Out", message: "There was a problem checking the username. Please try again", preferredStyle: UIAlertControllerStyle.alert)
-                    userNameProblemController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: {(alertAction) -> Void in
+                    let userNameProblemController = UIAlertController(title: "Unable to Log Out", message: "There was a problem checking the username. Please try again", preferredStyle: UIAlertController.Style.alert)
+                    userNameProblemController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: {(alertAction) -> Void in
                         self.tableView.deselectRow(at: self.currentlySelectedRow!, animated: true) }))
-                    userNameProblemController.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.cancel, handler: {(alertAction) -> Void in
+                    userNameProblemController.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.cancel, handler: {(alertAction) -> Void in
                         self.logOutUser(false, username: username) }))
                     self.present(userNameProblemController, animated: true, completion: nil)
                 }
@@ -1597,7 +1600,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - since: 0.5.0-beta
     /// - version: 1
     /// - date: 2016-01-11
-    func getDocumentsDirectory() -> NSString {
+    @objc func getDocumentsDirectory() -> NSString {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         logger.debug("Documents directory path: \(documentsDirectory)")
@@ -1666,7 +1669,7 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
     /// - date: 2017-01-15
     ///
     /// - returns: Were the logs able to be zipped
-    func zipLogFiles() -> Bool {
+    @objc func zipLogFiles() -> Bool {
         logger.info("Creating zip file of all device logs")
         
         let logFileDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("logs", isDirectory: true)
@@ -1729,4 +1732,20 @@ class UploadPopoverTableViewController: UITableViewController, UIImagePickerCont
         }
     }
 
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }

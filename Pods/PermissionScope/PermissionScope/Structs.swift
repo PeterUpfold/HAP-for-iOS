@@ -56,10 +56,10 @@ import Foundation
 
 /// Result for a permission status request.
 @objc public class PermissionResult: NSObject {
-    public let type: PermissionType
-    public let status: PermissionStatus
+    @objc public let type: PermissionType
+    @objc public let status: PermissionStatus
     
-    internal init(type:PermissionType, status:PermissionStatus) {
+    @objc internal init(type:PermissionType, status:PermissionStatus) {
         self.type   = type
         self.status = status
     }

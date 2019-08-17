@@ -10,7 +10,7 @@ import UIKit
 
 public extension Bundle {
     
-    class func imagePickerControllerBundle() -> Bundle {
+    @objc class func imagePickerControllerBundle() -> Bundle {
         let assetPath = Bundle(for: DKImageResource.self).resourcePath!
         return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
     }

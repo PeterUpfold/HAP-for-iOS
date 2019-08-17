@@ -34,20 +34,20 @@ class DKAssetGroupCell: UITableViewCell {
 		return thumbnailImageView
 	}()
 	
-    var groupNameLabel: UILabel = {
+    @objc var groupNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 13)
         return label
     }()
 	
-    var totalCountLabel: UILabel = {
+    @objc var totalCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = UIColor.gray
         return label
     }()
     
-    var customSelectedBackgroundView: UIView = {
+    @objc var customSelectedBackgroundView: UIView = {
         let selectedBackgroundView = UIView()
         
         let selectedFlag = UIImageView(image: DKImageResource.blueTickImage())
@@ -60,7 +60,7 @@ class DKAssetGroupCell: UITableViewCell {
         return selectedBackgroundView
     }()
     
-    lazy var customSeparator: DKAssetGroupSeparator = {
+    @objc lazy var customSeparator: DKAssetGroupSeparator = {
         let separator = DKAssetGroupSeparator(frame: CGRect(x: 10, y: self.bounds.height - 1, width: self.bounds.width, height: 0.5))
         
         separator.backgroundColor = UIColor.lightGray
@@ -68,7 +68,7 @@ class DKAssetGroupCell: UITableViewCell {
         return separator
     }()
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.selectedBackgroundView = self.customSelectedBackgroundView
@@ -128,7 +128,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     override var preferredContentSize: CGSize {
         get {
             if let groups = self.groups {
-                return CGSize(width: UIViewNoIntrinsicMetric, height: CGFloat(groups.count) * self.tableView.rowHeight)
+                return CGSize(width: UIView.noIntrinsicMetric, height: CGFloat(groups.count) * self.tableView.rowHeight)
             } else {
                 return super.preferredContentSize
             }
@@ -150,7 +150,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 		getImageManager().groupDataManager.addObserver(self)
 	}
 	
-	internal func loadGroups() {
+	@objc internal func loadGroups() {
 		getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
 			guard let strongSelf = self else { return }
 			

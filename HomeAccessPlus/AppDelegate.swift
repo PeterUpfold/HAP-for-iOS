@@ -72,15 +72,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Creating a timer to connect to the HAP+ server API
     // test, to keep the user session tokens active
-    var apiTestCheckTimer : Timer = Timer()
+    @objc var apiTestCheckTimer : Timer = Timer()
     
     // Creating a time to see if the device should be automatically
     // logged out for the current user, and to alert them
     // when this time is coming near
-    var autoLogOutCheckTimer : Timer = Timer()
+    @objc var autoLogOutCheckTimer : Timer = Timer()
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         // Configuring the logger options
@@ -126,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Preventing the file browser modal animating into view
         // when app restoration has taken place
         // See: http://stackoverflow.com/a/26591842
@@ -263,7 +263,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// - since: 0.7.0-beta
     /// - version: 5
     /// - date: 2016-04-20
-    func renewUserSessionTokens() {
+    @objc func renewUserSessionTokens() {
         // Preventing any API last access checks taking place if there
         // is no user logged in to the app, as there will be no session
         // on the HAP+ server that needs to be kept alive / created
@@ -346,7 +346,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///
     /// - seealso: startAPITestCheckTimer
     /// - seealso: startAutoLogOutCheckTimer
-    func startTimers() {
+    @objc func startTimers() {
         startAPITestCheckTimer()
         startAutoLogOutCheckTimer()
     }
@@ -363,7 +363,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// - seealso: renewUserSessionTokens
     /// - seealso: apiTestCheck
     /// - seealso: startTimers
-    func startAPITestCheckTimer() {
+    @objc func startAPITestCheckTimer() {
         apiTestCheckTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(AppDelegate.apiTestCheck), userInfo: nil, repeats: true)
     }
     
@@ -378,7 +378,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///
     /// - seealso: startTimers
     /// - seealso: autoLogOutCheck
-    func startAutoLogOutCheckTimer() {
+    @objc func startAutoLogOutCheckTimer() {
         autoLogOutCheckTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(AppDelegate.autoLogOutCheck), userInfo: nil, repeats: true)
     }
     
@@ -398,7 +398,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///
     /// - seealso: stopAPITestCheckTimer
     /// - seealso: stopAutoLogOutCheckTimer
-    func stopTimers() {
+    @objc func stopTimers() {
         stopAPITestCheckTimer()
         stopAutoLogOutCheckTimer()
     }
@@ -415,7 +415,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// - seealso: renewUserSessionTokens
     /// - seealso: apiTestCheck
     /// - seealso: stopTimers
-    func stopAPITestCheckTimer() {
+    @objc func stopAPITestCheckTimer() {
         apiTestCheckTimer.invalidate()
     }
     
@@ -430,7 +430,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///
     /// - seealso: stopTimers
     /// - seealso: autoLogOutCheck
-    func stopAutoLogOutCheckTimer() {
+    @objc func stopAutoLogOutCheckTimer() {
         autoLogOutCheckTimer.invalidate()
     }
     
@@ -461,7 +461,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// - date: 2016-04-20
     ///
     /// - seealso: renewUserSessionTokens
-    func apiTestCheck() {
+    @objc func apiTestCheck() {
         // Seeing if there is currently an active connection to
         // the Internet
         logger.debug("Running API test check")
@@ -533,7 +533,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///
     /// - seealso: startAutoLogOutCheckTimer
     /// - seealso: stopAutoLogOutCheckTimer
-    func autoLogOutCheck() {
+    @objc func autoLogOutCheck() {
         // Seeing if auto-log out is enabled, as this can be
         // set only when a user with a valid timetable and lesson
         // logs in. If the setting is false, then call the stop
@@ -595,8 +595,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     logger.info("There is less than 5 minutes before the user will be logged out. Showing alert to user")
                     
                     // Creating the alert message to the user
-                    let autoLogOutController = UIAlertController(title: "Automatic Log Out", message: "The lesson will finish in 5 minutes. You will be logged out automatically", preferredStyle: UIAlertControllerStyle.alert)
-                    autoLogOutController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    let autoLogOutController = UIAlertController(title: "Automatic Log Out", message: "The lesson will finish in 5 minutes. You will be logged out automatically", preferredStyle: UIAlertController.Style.alert)
+                    autoLogOutController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
                     
                     // Being creative to show the log out alert on the top
                     // most view controller, as the file browsers are presented
@@ -642,7 +642,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// - since: 0.9.0-alpha
     /// - version: 2
     /// - date: 2016-01-14
-    func loggerSetup() {
+    @objc func loggerSetup() {
         //logger.setup(level: .debug, showThreadName: true, showLevel: true, showFileNames: true, showLineNumbers: true, showDate: true, writeToFile: nil)
         
         // Create a destination for the system console log (via NSLog)

@@ -78,7 +78,7 @@ class FileTableViewCell: UITableViewCell {
     ///
     /// - parameter fileType: The type of the file of the table cell
     /// - parameter fileExtension: The extension of the file in the table cell
-    func fileIcon(_ fileType: String, fileExtension: String) {
+    @objc func fileIcon(_ fileType: String, fileExtension: String) {
         var icon : FAType
         logger.verbose("Setting icon for the file type: \(fileType)")
         

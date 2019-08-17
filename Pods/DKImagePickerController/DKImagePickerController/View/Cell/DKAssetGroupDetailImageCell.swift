@@ -35,12 +35,12 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     
     class DKImageCheckView: UIView {
         
-        internal lazy var checkImageView: UIImageView = {
+        @objc internal lazy var checkImageView: UIImageView = {
             let imageView = UIImageView(image: DKImageResource.checkedImage().withRenderingMode(.alwaysTemplate))
             return imageView
         }()
         
-        internal lazy var checkLabel: UILabel = {
+        @objc internal lazy var checkLabel: UILabel = {
             let label = UILabel()
             label.textAlignment = .right
             

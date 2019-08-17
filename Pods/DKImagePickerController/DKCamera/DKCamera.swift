@@ -19,7 +19,7 @@ open class DKCameraPassthroughView: UIView {
 
 extension AVMetadataFaceObject {
 
-    open func realBounds(inCamera camera: DKCamera) -> CGRect {
+    @objc open func realBounds(inCamera camera: DKCamera) -> CGRect {
         var bounds = CGRect()
         let previewSize = camera.previewLayer.bounds.size
         let isFront = camera.currentDevice == camera.captureDeviceFront
@@ -44,31 +44,31 @@ public enum DKCameraDeviceSourceType : Int {
 
 open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
-    open class func checkCameraPermission(_ handler: @escaping (_ granted: Bool) -> Void) {
+    @objc open class func checkCameraPermission(_ handler: @escaping (_ granted: Bool) -> Void) {
         func hasCameraPermission() -> Bool {
-            return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized
+            return AVCaptureDevice.authorizationStatus(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) == .authorized
         }
         
         func needsToRequestCameraPermission() -> Bool {
-            return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .notDetermined
+            return AVCaptureDevice.authorizationStatus(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) == .notDetermined
         }
         
         hasCameraPermission() ? handler(true) : (needsToRequestCameraPermission() ?
-            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { granted in
+            AVCaptureDevice.requestAccess(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video)), completionHandler: { granted in
                 DispatchQueue.main.async(execute: { () -> Void in
                     hasCameraPermission() ? handler(true) : handler(false)
                 })
             }) : handler(false))
     }
     
-    open var didCancel: (() -> Void)?
-    open var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
+    @objc open var didCancel: (() -> Void)?
+    @objc open var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
     
     /// Notify the listener of the detected faces in the preview frame.
-    open var onFaceDetection: ((_ faces: [AVMetadataFaceObject]) -> Void)?
+    @objc open var onFaceDetection: ((_ faces: [AVMetadataFaceObject]) -> Void)?
     
     /// Be careful this may cause the view to load prematurely.
-    open var cameraOverlayView: UIView? {
+    @objc open var cameraOverlayView: UIView? {
         didSet {
             if let cameraOverlayView = cameraOverlayView {
                 self.view.addSubview(cameraOverlayView)
@@ -77,7 +77,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     /// The flashModel will to be remembered to next use.
-    open var flashMode:AVCaptureFlashMode! {
+    open var flashMode:AVCaptureDevice.FlashMode! {
         didSet {
             self.updateFlashButton()
             self.updateFlashMode()
@@ -85,46 +85,46 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    open class func isAvailable() -> Bool {
+    @objc open class func isAvailable() -> Bool {
         return UIImagePickerController.isSourceTypeAvailable(.camera)
     }
     
     /// Determines whether or not the rotation is enabled.
     
-    open var allowsRotate = false
+    @objc open var allowsRotate = false
     
     /// set to NO to hide all standard camera UI. default is YES.
-    open var showsCameraControls = true {
+    @objc open var showsCameraControls = true {
         didSet {
             self.contentView.isHidden = !self.showsCameraControls
         }
     }
     
-    open let captureSession = AVCaptureSession()
-    open var previewLayer: AVCaptureVideoPreviewLayer!
+    @objc open let captureSession = AVCaptureSession()
+    @objc open var previewLayer: AVCaptureVideoPreviewLayer!
     fileprivate var beginZoomScale: CGFloat = 1.0
     fileprivate var zoomScale: CGFloat = 1.0
     
-    open var defaultCaptureDevice = DKCameraDeviceSourceType.rear
-    open var currentDevice: AVCaptureDevice?
-    open var captureDeviceFront: AVCaptureDevice?
-    open var captureDeviceRear: AVCaptureDevice?
+    @objc open var defaultCaptureDevice = DKCameraDeviceSourceType.rear
+    @objc open var currentDevice: AVCaptureDevice?
+    @objc open var captureDeviceFront: AVCaptureDevice?
+    @objc open var captureDeviceRear: AVCaptureDevice?
     fileprivate weak var stillImageOutput: AVCaptureStillImageOutput?
     
-    open var contentView = UIView()
+    @objc open var contentView = UIView()
     
     open var originalOrientation: UIDeviceOrientation!
     open var currentOrientation: UIDeviceOrientation!
-    open let motionManager = CMMotionManager()
+    @objc open let motionManager = CMMotionManager()
     
-    open lazy var flashButton: UIButton = {
+    @objc open lazy var flashButton: UIButton = {
         let flashButton = UIButton()
         flashButton.addTarget(self, action: #selector(DKCamera.switchFlashMode), for: .touchUpInside)
         
         return flashButton
     }()
-    open var cameraSwitchButton: UIButton!
-    open var captureButton: UIButton!
+    @objc open var cameraSwitchButton: UIButton!
+    @objc open var captureButton: UIButton!
     
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -191,8 +191,8 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - Setup
     
-    let bottomView = UIView()
-    open func setupUI() {
+    @objc let bottomView = UIView()
+    @objc open func setupUI() {
         self.view.backgroundColor = UIColor.black
         self.view.addSubview(self.contentView)
         self.contentView.backgroundColor = UIColor.clear
@@ -264,7 +264,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // cancel button
         let cancelButton: UIButton = {
             let cancelButton = UIButton()
-            cancelButton.addTarget(self, action: #selector(dismiss as (Void) -> Void), for: .touchUpInside)
+            cancelButton.addTarget(self, action: #selector(dismiss as () -> Void), for: .touchUpInside)
             cancelButton.setImage(DKCameraResource.cameraCancelImage(), for: .normal)
             cancelButton.sizeToFit()
             
@@ -282,8 +282,8 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(DKCamera.handleFocus(_:))))
     }
     
-    open func setupSession() {
-        self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto
+    @objc open func setupSession() {
+        self.captureSession.sessionPreset = AVCaptureSession.Preset(rawValue: convertFromAVCaptureSessionPreset(AVCaptureSession.Preset.photo))
         
         self.setupCurrentDevice()
         
@@ -299,12 +299,12 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             
             if self.captureSession.canAddOutput(metadataOutput) {
                 self.captureSession.addOutput(metadataOutput)
-                metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeFace]
+                metadataOutput.metadataObjectTypes = [convertFromAVMetadataObjectObjectType(AVMetadataObject.ObjectType.face)]
             }
         }
         
         self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-        self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        self.previewLayer.videoGravity = AVLayerVideoGravity(rawValue: convertFromAVLayerVideoGravity(AVLayerVideoGravity.resizeAspectFill))
         self.previewLayer.frame = self.view.bounds
         
         let rootLayer = self.view.layer
@@ -312,7 +312,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         rootLayer.insertSublayer(self.previewLayer, at: 0)
     }
     
-    open func setupCurrentDevice() {
+    @objc open func setupCurrentDevice() {
         if let currentDevice = self.currentDevice {
             
             if currentDevice.isFlashAvailable {
@@ -322,7 +322,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 self.flashButton.isHidden = true
             }
             
-            for oldInput in self.captureSession.inputs as! [AVCaptureInput] {
+            for oldInput in self.captureSession.inputs {
                 self.captureSession.removeInput(oldInput)
             }
             
@@ -344,8 +344,8 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    open func setupDevices() {
-        let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+    @objc open func setupDevices() {
+        let devices = AVCaptureDevice.devices(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) 
         
         for device in devices {
             if device.position == .back {
@@ -369,7 +369,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     fileprivate var isStopped = false
     
-    open func startSession() {
+    @objc open func startSession() {
         self.isStopped = false
         
         if !self.captureSession.isRunning {
@@ -377,19 +377,19 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    open func stopSession() {
+    @objc open func stopSession() {
         self.pauseSession()
         
         self.captureSession.stopRunning()
     }
     
-    open func pauseSession() {
+    @objc open func pauseSession() {
         self.isStopped = true
         
         self.updateSession(isEnable: false)
     }
     
-    open func updateSession(isEnable: Bool) {
+    @objc open func updateSession(isEnable: Bool) {
         if ((!self.isStopped) || (self.isStopped && !isEnable)),
             let connection = self.previewLayer.connection {
             connection.isEnabled = isEnable
@@ -398,12 +398,12 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - Callbacks
     
-    internal func dismiss() {
+    @objc internal func dismiss() {
         self.didCancel?()
     }
     
-    open func takePicture() {
-        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+    @objc open func takePicture() {
+        let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video)))
         if authStatus == .denied {
             return
         }
@@ -412,7 +412,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.captureButton.isEnabled = false
             
             DispatchQueue.global().async(execute: {
-                if let connection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo) {
+                if let connection = stillImageOutput.connection(with: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video))) {
                     connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
                     connection.videoScaleAndCropFactor = self.zoomScale
                     
@@ -422,7 +422,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                             
                             if let didFinishCapturingImage = self.didFinishCapturingImage, let imageData = imageData, let takenImage = UIImage(data: imageData) {
                                 
-                                let outputRect = self.previewLayer.metadataOutputRectOfInterest(for: self.previewLayer.bounds)
+                                let outputRect = self.previewLayer.metadataOutputRectConverted(fromLayerRect: self.previewLayer.bounds)
                                 let takenCGImage = takenImage.cgImage!
                                 let width = CGFloat(takenCGImage.width)
                                 let height = CGFloat(takenCGImage.height)
@@ -447,7 +447,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - Handles Zoom
     
-    open func handleZoom(_ gesture: UIPinchGestureRecognizer) {
+    @objc open func handleZoom(_ gesture: UIPinchGestureRecognizer) {
         if gesture.state == .began {
             self.beginZoomScale = self.zoomScale
         } else if gesture.state == .changed {
@@ -461,14 +461,14 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - Handles Focus
     
-    open func handleFocus(_ gesture: UITapGestureRecognizer) {
+    @objc open func handleFocus(_ gesture: UITapGestureRecognizer) {
         if let currentDevice = self.currentDevice , currentDevice.isFocusPointOfInterestSupported {
             let touchPoint = gesture.location(in: self.view)
             self.focusAtTouchPoint(touchPoint)
         }
     }
     
-    open func focusAtTouchPoint(_ touchPoint: CGPoint) {
+    @objc open func focusAtTouchPoint(_ touchPoint: CGPoint) {
         
         func showFocusViewAtPoint(_ touchPoint: CGPoint) {
             
@@ -488,7 +488,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             FocusView.focusView.center = touchPoint
             self.view.addSubview(FocusView.focusView)
             UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.1,
-                           options: UIViewAnimationOptions(), animations: { () -> Void in
+                           options: UIView.AnimationOptions(), animations: { () -> Void in
                             FocusView.focusView.transform = CGAffineTransform.identity.scaledBy(x: 0.6, y: 0.6)
             }) { (Bool) -> Void in
                 FocusView.focusView.removeFromSuperview()
@@ -499,7 +499,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
-        let focusPoint = self.previewLayer.captureDevicePointOfInterest(for: touchPoint)
+        let focusPoint = self.previewLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
         
         showFocusViewAtPoint(touchPoint)
         
@@ -521,7 +521,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - Handles Switch Camera
     
-    internal func switchCamera() {
+    @objc internal func switchCamera() {
         self.currentDevice = self.currentDevice == self.captureDeviceRear ?
             self.captureDeviceFront : self.captureDeviceRear
         
@@ -530,7 +530,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - Handles Flash
     
-    internal func switchFlashMode() {
+    @objc internal func switchFlashMode() {
         switch self.flashMode! {
         case .auto:
             self.flashMode = .off
@@ -541,22 +541,22 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    open func flashModeFromUserDefaults() -> AVCaptureFlashMode {
+    @objc open func flashModeFromUserDefaults() -> AVCaptureDevice.FlashMode {
         let rawValue = UserDefaults.standard.integer(forKey: "DKCamera.flashMode")
-        return AVCaptureFlashMode(rawValue: rawValue)!
+        return AVCaptureDevice.FlashMode(rawValue: rawValue)!
     }
     
-    open func updateFlashModeToUserDefautls(_ flashMode: AVCaptureFlashMode) {
+    @objc open func updateFlashModeToUserDefautls(_ flashMode: AVCaptureDevice.FlashMode) {
         UserDefaults.standard.set(flashMode.rawValue, forKey: "DKCamera.flashMode")
     }
     
-    open func updateFlashButton() {
+    @objc open func updateFlashButton() {
         struct FlashImage {
             
             static let images = [
-                AVCaptureFlashMode.auto : DKCameraResource.cameraFlashAutoImage(),
-                AVCaptureFlashMode.on : DKCameraResource.cameraFlashOnImage(),
-                AVCaptureFlashMode.off : DKCameraResource.cameraFlashOffImage()
+                AVCaptureDevice.FlashMode.auto : DKCameraResource.cameraFlashAutoImage(),
+                AVCaptureDevice.FlashMode.on : DKCameraResource.cameraFlashOnImage(),
+                AVCaptureDevice.FlashMode.off : DKCameraResource.cameraFlashOffImage()
             ]
             
         }
@@ -566,7 +566,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         self.flashButton.sizeToFit()
     }
     
-    open func updateFlashMode() {
+    @objc open func updateFlashMode() {
         if let currentDevice = self.currentDevice
             , currentDevice.isFlashAvailable && currentDevice.isFlashModeSupported(self.flashMode) {
             try! currentDevice.lockForConfiguration()
@@ -577,7 +577,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     // MARK: - AVCaptureMetadataOutputObjectsDelegate
     
-    public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+    public func metadataOutput(_ captureOutput: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         self.onFaceDetection?(metadataObjects as! [AVMetadataFaceObject])
     }
     
@@ -587,26 +587,26 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return false
     }
     
-    open func setupMotionManager() {
+    @objc open func setupMotionManager() {
         self.motionManager.accelerometerUpdateInterval = 0.5
         self.motionManager.gyroUpdateInterval = 0.5
     }
     
-    open func initialOriginalOrientationForOrientation() {
+    @objc open func initialOriginalOrientationForOrientation() {
         self.originalOrientation = UIApplication.shared.statusBarOrientation.toDeviceOrientation()
         if let connection = self.previewLayer.connection {
             connection.videoOrientation = self.originalOrientation.toAVCaptureVideoOrientation()
         }
     }
     
-    open func updateContentLayoutForCurrentOrientation() {
+    @objc open func updateContentLayoutForCurrentOrientation() {
         let newAngle = self.currentOrientation.toAngleRelativeToPortrait() - self.originalOrientation.toAngleRelativeToPortrait()
         
         if self.allowsRotate {
             var contentViewNewSize: CGSize!
             let width = self.view.bounds.width
             let height = self.view.bounds.height
-            if UIDeviceOrientationIsLandscape(self.currentOrientation) {
+            if self.currentOrientation.isLandscape {
                 contentViewNewSize = CGSize(width: max(width, height), height: min(width, height))
             } else {
                 contentViewNewSize = CGSize(width: min(width, height), height: max(width, height))
@@ -717,7 +717,7 @@ public extension CMAcceleration {
 
 public extension Bundle {
     
-    class func cameraBundle() -> Bundle {
+    @objc class func cameraBundle() -> Bundle {
         let assetPath = Bundle(for: DKCameraResource.self).resourcePath!
         return Bundle(path: (assetPath as NSString).appendingPathComponent("DKCameraResource.bundle"))!
     }
@@ -755,3 +755,23 @@ open class DKCameraResource {
     
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMediaType(_ input: AVMediaType) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVCaptureSessionPreset(_ input: AVCaptureSession.Preset) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMetadataObjectObjectType(_ input: AVMetadataObject.ObjectType) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVLayerVideoGravity(_ input: AVLayerVideoGravity) -> String {
+	return input.rawValue
+}

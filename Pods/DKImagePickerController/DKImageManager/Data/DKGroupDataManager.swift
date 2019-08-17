@@ -20,21 +20,21 @@ protocol DKGroupDataManagerObserver {
 
 public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 
-    public var groupIds: [String]?
+    @objc public var groupIds: [String]?
 	private var groups: [String : DKAssetGroup]?
     private var assets = [String: DKAsset]()
 	
 	public var assetGroupTypes: [PHAssetCollectionSubtype]?
-	public var assetFetchOptions: PHFetchOptions?
-	public var showsEmptyAlbums: Bool = true
+	@objc public var assetFetchOptions: PHFetchOptions?
+	@objc public var showsEmptyAlbums: Bool = true
 
-    public var assetFilter: ((_ asset: PHAsset) -> Bool)?
+    @objc public var assetFilter: ((_ asset: PHAsset) -> Bool)?
 	
 	deinit {
 		PHPhotoLibrary.shared().unregisterChangeObserver(self)
 	}
 	
-	public func invalidate() {
+	@objc public func invalidate() {
 		self.groupIds?.removeAll()
         self.groups?.removeAll()
         self.assets.removeAll()
@@ -42,7 +42,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		PHPhotoLibrary.shared().unregisterChangeObserver(self)
 	}
 
-	public func fetchGroups(_ completeBlock: @escaping (_ groups: [String]?, _ error: NSError?) -> Void) {
+	@objc public func fetchGroups(_ completeBlock: @escaping (_ groups: [String]?, _ error: NSError?) -> Void) {
 		if let assetGroupTypes = self.assetGroupTypes {
 			DispatchQueue.global(qos: .userInteractive).async {
 				[weak self] in
@@ -89,11 +89,11 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		}
 	}
 	
-	public func fetchGroupWithGroupId(_ groupId: String) -> DKAssetGroup {
+	@objc public func fetchGroupWithGroupId(_ groupId: String) -> DKAssetGroup {
 		return self.groups![groupId]!
 	}
 	
-	public func fetchGroupThumbnailForGroup(_ groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
+	@objc public func fetchGroupThumbnailForGroup(_ groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
 		let group = self.fetchGroupWithGroupId(groupId)
 		if group.totalCount == 0 {
 			completeBlock(nil, nil)
@@ -104,7 +104,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		latestAsset.fetchImageWithSize(size, options: options, completeBlock: completeBlock)
 	}
 	
-	public func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset {
+	@objc public func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset {
         let originalAsset = self.fetchOriginalAsset(group, index: index)
         var asset = self.assets[originalAsset.localIdentifier]
         if asset == nil {
@@ -114,7 +114,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		return asset!
 	}
     
-    public func fetchOriginalAsset(_ group: DKAssetGroup, index: Int) -> PHAsset {
+    @objc public func fetchOriginalAsset(_ group: DKAssetGroup, index: Int) -> PHAsset {
         return group.fetchResult[group.totalCount - index - 1]
     }
 	

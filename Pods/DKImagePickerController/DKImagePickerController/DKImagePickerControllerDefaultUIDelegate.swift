@@ -11,15 +11,15 @@ import UIKit
 @objc
 open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
 	
-	open weak var imagePickerController: DKImagePickerController!
+	@objc open weak var imagePickerController: DKImagePickerController!
 	
-	open var doneButton: UIButton?
+	@objc open var doneButton: UIButton?
 	
-	open func createDoneButtonIfNeeded() -> UIButton {
+	@objc open func createDoneButtonIfNeeded() -> UIButton {
         if self.doneButton == nil {
-            let button = UIButton(type: UIButtonType.custom)
+            let button = UIButton(type: UIButton.ButtonType.custom)
             button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, for: .normal)
-            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControlEvents.touchUpInside)
+            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
             self.doneButton = button
             self.updateDoneButtonTitle(button)
         }
@@ -27,7 +27,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 		return self.doneButton!
 	}
     
-    open func updateDoneButtonTitle(_ button: UIButton) {
+    @objc open func updateDoneButtonTitle(_ button: UIButton) {
         if self.imagePickerController.selectedAssets.count > 0 {
             button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), self.imagePickerController.selectedAssets.count), for: .normal)
         } else {
@@ -60,7 +60,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	                                  showsCancelButtonForVC vc: UIViewController) {
 		vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
 		                                                      target: imagePickerController,
-		                                                      action: #selector(imagePickerController.dismiss as (Void) -> Void))
+		                                                      action: #selector(imagePickerController.dismiss as () -> Void)) as UIBarButtonItem
 	}
 	
 	open func imagePickerController(_ imagePickerController: DKImagePickerController,
@@ -106,7 +106,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	
 	// Internal
 	
-	public func checkCameraPermission(_ camera: DKCamera) {
+	@objc public func checkCameraPermission(_ camera: DKCamera) {
 		func cameraDenied() {
 			DispatchQueue.main.async {
 				let permissionView = DKPermissionView.permissionView(.camera)

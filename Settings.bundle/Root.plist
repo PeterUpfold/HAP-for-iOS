@@ -5,7 +5,7 @@
 	<key>StringsTable</key>
 	<string>Root</string>
 	<key>ApplicationGroupContainerIdentifier</key>
-	<string>group.uk.co.stuajnht.ios.HomeAccessPlus</string>
+	<string>group.uk.org.upfold.HAP</string>
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>

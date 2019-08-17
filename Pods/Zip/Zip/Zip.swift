@@ -169,11 +169,11 @@ public class Zip {
                                        FileAttributeKey.modificationDate.rawValue : creationDate]
             do {
                 if isDirectory {
-                    try fileManager.createDirectory(atPath: fullPath, withIntermediateDirectories: true, attributes: directoryAttributes)
+                    try fileManager.createDirectory(atPath: fullPath, withIntermediateDirectories: true, attributes: convertToOptionalFileAttributeKeyDictionary(directoryAttributes))
                 }
                 else {
                     let parentDirectory = (fullPath as NSString).deletingLastPathComponent
-                    try fileManager.createDirectory(atPath: parentDirectory, withIntermediateDirectories: true, attributes: directoryAttributes)
+                    try fileManager.createDirectory(atPath: parentDirectory, withIntermediateDirectories: true, attributes: convertToOptionalFileAttributeKeyDictionary(directoryAttributes))
                 }
             } catch {}
             if fileManager.fileExists(atPath: fullPath) && !isDirectory && !overwrite {
@@ -395,4 +395,10 @@ public class Zip {
         return validFileExtensions.contains(fileExtension)
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalFileAttributeKeyDictionary(_ input: [String: Any]?) -> [FileAttributeKey: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (FileAttributeKey(rawValue: key), value)})
 }

@@ -103,7 +103,7 @@ class HomeAccessPlusUITests: XCTestCase {
         // Removing any characters from the string that shouldn't
         // be there, namely '<', '>' and ' '
         var formattedString = String(encryptedString)
-        formattedString = formattedString?.replacingOccurrences(of: " ", with: "")
+        formattedString = formattedString.replacingOccurrences(of: " ", with: "")
         
         // Converting the hex string into Unicode values, to check
         // that the file item from the server has been successfully
@@ -111,7 +111,7 @@ class HomeAccessPlusUITests: XCTestCase {
         // See: http://stackoverflow.com/a/30795372
         var formattedStringCharacters = [Character]()
         
-        for characterPosition in (formattedString?.characters)! {
+        for characterPosition in (formattedString.characters) {
             formattedStringCharacters.append(characterPosition)
         }
         
